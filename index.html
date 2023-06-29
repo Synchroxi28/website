@@ -6,19 +6,15 @@
         <title>Title</title>
     </head>
     <body>
+
         Name    <input type="text" id="namebox"><br>
-        Roll No <input type="text" id="rollbox"><br>
-        Section <input type="text" id="secbox"><br>
-        Gender  <input type="text" id="genbox"><br>
-        <button id="insert">insert</button>
-        <button id="select">select</button>
-        <button id="update">update</button>
-        <button id="delete">delete</button>
+        <p id="number">0</p>
+        <button id="reset">reset</button>
 
         <script type="module" id="MainScript">
             import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
-            import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+            import { getDatabase, ref, set, onValue, child, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
             
             // TODO: Replace the following with your app's Firebase project configuration
             // See: https://firebase.google.com/docs/web/learn-more#config-object
@@ -36,17 +32,35 @@
             
             // Initialize Firebase
             const app = initializeApp(firebaseConfig);
+
             
             
             // Initialize Realtime Database and get a reference to the service
             const database = getDatabase(app);
             
-            const db = getDatabase();
-            set(ref(db, 'users/'), {
-                username: 'name',
-                email: 'email',
-                profile_picture : 'imageUrl'
+            function setVal() {
+                const db = getDatabase();
+                set(ref(db, 'num/'), {
+                    number: '0'
+                });
+            }
+
+            const dbRef = ref(getDatabase());
+            get(child(dbRef, `num/number`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                console.log(snapshot.val());
+                document.getElementById('number').innerText = snapshot.val()
+            } else {
+                console.log("No data available");
+            }
+            }).catch((error) => {
+            console.error(error);
             });
+
+
+            document.getElementById('reset').onclick = function(){
+                setVal()
+            }
           </script>
     </body>
 </html>
