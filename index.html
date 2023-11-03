@@ -8,7 +8,7 @@
     <body>
 
         Name    <input type="text" id="namebox"><br>
-        <p id="number">0</p>
+        Number  <input id="number" type="text"><br>
         <button id="reset">reset</button>
 
         <script type="module" id="MainScript">
@@ -41,7 +41,7 @@
             function setVal() {
                 const db = getDatabase();
                 set(ref(db, 'num/'), {
-                    number: '0'
+                    number: String(document.getElementById('number').value)
                 });
             }
 
