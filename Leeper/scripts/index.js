@@ -633,6 +633,7 @@ function removed() {
     document.getElementById('detailList').append(detailDiv);
 
     //check data if recycle exists
+    console.log(data['recycle'])
     if (Object.keys(data['recycle']).length > 0) {
         
         var recycleCalendar = document.createElement('div')
