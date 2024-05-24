@@ -1790,7 +1790,18 @@ function calendarOverview() {
 
 function removeProgram() {
     if (selectedProgram != undefined) {
-        data['recycle'][document.getElementById(selectedProgram).innerText] = data['projects'][document.getElementById(selectedProgram).innerText]
+        if (Object.keys(data).includes('recycle')){
+            data['recycle'][document.getElementById(selectedProgram).innerText] = data['projects'][document.getElementById(selectedProgram).innerText]
+        }
+        else {
+            var newObject = {
+                ['recycle']: {
+                    [document.getElementById(selectedProgram).innerText]: data['projects'][document.getElementById(selectedProgram).innerText]
+                }
+            }
+            
+            Object.assign(data, newObject)
+        }
         delete data['projects'][document.getElementById(selectedProgram).innerText]
         showTime(document.getElementById('currentTimeFrame').innerText)
     }
