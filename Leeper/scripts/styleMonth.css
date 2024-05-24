@@ -1,0 +1,56 @@
+
+.entireCalendarMonth { 
+    position:absolute;
+    width:3700px;;
+    left:530px;
+    top:169px;
+}
+.calendarRowMonth, .calendarDatesMonth, .calendarMachinesMonth {
+    position: relative;
+    display: grid;
+    background: grey;
+}
+.calendarRowMonth {
+    width: 3160px;
+    position: relative;
+    grid-template-columns: repeat(31, 100px);
+    grid-template-rows: repeat(1, 100px);
+    border: 1px solid grey;
+    grid-gap: 2px;
+}
+.calendarDatesMonth {
+    grid-template-columns: repeat(31, 100px);
+    grid-template-rows: repeat(1, 100px);
+    position: absolute;
+    top: 70px;
+    left: 530px;
+    font-size: 40px;
+    font-weight: 700;
+    z-index: 950;
+    border: 1px solid grey;
+    grid-gap: 2px;
+    border-top: none;
+}
+.calendarMachinesMonth {
+    position: absolute;
+    left:380px;
+    top:169px;
+    grid-template-columns: repeat(1, 150px);
+    float:left;
+    font-size: 20px;
+}
+.gridPerSquareMonth {
+    display: grid;
+    width: 50px;
+    position: relative;
+    grid-template-columns: repeat(1, 50px);
+    grid-gap: 0px;
+}
+.dayNumbersMonth {
+    position: relative;
+    background: white;
+    justify-content: center;
+    text-align: center;
+    opacity: '1';
+    z-index: 950;
+}

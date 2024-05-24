@@ -1,0 +1,53 @@
+
+.entireCalendarDay { 
+    position:absolute;
+    left:920px;
+    top:169px;
+}
+.calendarRowDay, .calendarDatesDay, .calendarMachinesDay {
+    position: relative;
+    display: grid;
+    background: grey;
+}
+.calendarRowDay {
+    width: 150px;
+    position: relative;
+    grid-template-columns: repeat(1, 150px);
+    grid-template-rows: repeat(1, 150px);
+    border: 1px solid grey;
+    grid-gap: 2px;
+}
+.calendarDatesDay {
+    grid-template-columns: repeat(1, 150px);
+    grid-template-rows: repeat(1, 90px);
+    position: relative;
+    top: 23px;
+    left:540px;
+    width: 150px;
+    font-size: 40px;
+    font-weight: 700;
+    grid-gap: 2px;
+}
+.calendarMachinesDay {
+    position: absolute;
+    top:170px;
+    left: 780px;
+    grid-template-columns: repeat(1, 150px);
+    float:left;
+    font-size: 20px;
+    grid-gap: 2px;
+}
+.gridPerSquareDay {
+    display: grid;
+    width: 150px;
+    position: relative;
+    grid-template-columns: repeat(1, 150px);
+    grid-gap: 0px;
+}
+.dayNumbersDay {
+    background: white;
+    justify-content: center;
+    text-align: center;
+    opacity: '1';
+    width: 150px;
+}
