@@ -633,8 +633,8 @@ function removed() {
     document.getElementById('detailList').append(detailDiv);
 
     //check data if recycle exists
-    console.log(data['recycle'])
-    if (Object.keys(data['recycle']).length > 0) {
+
+    try {
         
         var recycleCalendar = document.createElement('div')
         recycleCalendar.setAttribute('class', 'recycleCalendar');
@@ -677,7 +677,7 @@ function removed() {
             item1.addEventListener('dragend', handleDragEnd, false);
         });
     }
-    else {
+    catch(e) {
         var noRecycle = document.createElement('div');
         noRecycle.setAttribute('class', 'noRecycle');
         noRecycle.innerText = 'No Recycle Found';
