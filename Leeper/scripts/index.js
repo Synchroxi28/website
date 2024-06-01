@@ -65,7 +65,7 @@ function createLoadingScreen() {
     var loadingScreen = document.createElement('div');
     loadingScreen.setAttribute('class', 'loadingScreen')
     loadingScreen.setAttribute('id', 'loadingScreen')
-    document.body.insertBefore(loadingScreen, document.getElementById("logo"));
+    document.body.insertBefore(loadingScreen, document.getElementById("detailList"));
 }
 
 
@@ -708,6 +708,32 @@ function newProgram() {
     detailVariable.value = 'Empty';
     detailDiv.append(detailVariable);
 
+    var detailVariable = document.createElement('div');
+    detailVariable.setAttribute('class', 'newOverviewTest');
+    detailVariable.setAttribute('id', 'newOverviewTest');
+    detailDiv.append(detailVariable);
+    var tempDay = 1;
+    var tempGetDay = new Date(year + '-' + month + '-' + tempDay);
+    var tempMonthOverview = month
+    for (let x = 0; x < 5; x++) {
+        var rows = document.createElement('div');
+        rows.setAttribute('class', 'calendarOverviewRowTest');
+        document.getElementById('newOverviewTest').append(rows);
+
+        for (let x = 0; x < 7; x++) {
+            if (tempDay > daysInEachMonth[months.indexOf(tempMonthOverview)]) {
+                tempDay = 1;
+                tempMonthOverview = months[months.indexOf(tempMonthOverview) + 1];
+            }
+            var box = document.createElement('div');
+            box.setAttribute('class', 'calendarOverviewBoxTest');
+            box.setAttribute('id', 'calendarOverviewBox,' + tempDay + ',' + tempMonthOverview);
+            box.innerText = tempDay;
+            rows.append(box);
+            tempDay = tempDay + 1;
+        }
+    }
+
     detailVariable = document.createElement('div');
     detailVariable.setAttribute('class', 'machineAssignedAdd');
     detailVariable.innerText = 'Machine Assigned: ';
@@ -1254,7 +1280,7 @@ function showWeek(firstDayShown) {
     }
 
     var calendarMachines = document.getElementById('calendarMachines');
-    calendarMachines.style.gridTemplateRows = 'repeat(' + String(Object.keys(data[Object.keys(data)[0]]).length) + ',150px)';
+    calendarMachines.style.gridTemplateRows = 'repeat(' + String(Object.keys(data[Object.keys(data)[0]]).length) + ', 15%)';
     for (let i = 0; i < Object.keys(data[Object.keys(data)[0]]).length; i++) {
         var machines = document.createElement('div');
 
@@ -1278,8 +1304,8 @@ function showWeek(firstDayShown) {
             var gridPerSquare = document.createElement('div');
             gridPerSquare.setAttribute('class', 'gridPerSquareWeek');
             gridPerSquare.setAttribute('id', Object.keys(data[Object.keys(data)[0]])[i] + ',' + daysOnCalendar[x] + ',gridPerSqaure');
-            gridPerSquare.style.gridTemplateRows = 'repeat(1,150px)';
-            gridPerSquare.style.gridTemplateColumns = 'repeat(1,150px)';
+            gridPerSquare.style.gridTemplateRows = 'repeat(1,100%)';
+            gridPerSquare.style.gridTemplateColumns = 'repeat(1,95%)';
             machinePrograms.append(gridPerSquare);
 
             var squareBlank = document.createElement('div');
@@ -1351,7 +1377,7 @@ function showWeek(firstDayShown) {
                             var gridTemplateRows = parseFloat((gridTemplate.split('(')[1]).split(',')[0]) + 1;
                             var gridTemplateSize = parseFloat(((gridTemplate.split('(')[1]).split(',')[1]).split('p')[0]) * (gridTemplateRows - 1) / gridTemplateRows;
 
-                            specificSquare.parentNode.style.gridTemplateRows = String('repeat(' + gridTemplateRows + ',' + gridTemplateSize + 'px)');
+                            specificSquare.parentNode.style.gridTemplateRows = String('repeat(' + gridTemplateRows + ',' + gridTemplateSize + '%)');
                             
                             specificSquare.parentNode.append(programSpecific);
                         }
