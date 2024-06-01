@@ -9,18 +9,21 @@
 <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-database.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-storage.js"></script>
-<script src="https://synchroxi.com/Leeper/scripts/index.js" defer></script>
+<script src="scripts/index.js" defer></script>
 <script src="scripts/checkUsers.js" defer></script>
 <head>
   <meta charset='utf-8' />
 </head>
 <body>
-    <a class="logo" id="logo" onclick="homeSideScreen()">13</a>
     <div class="detailList" id="detailList">
+        <a class="logo" id="logo" onclick="homeSideScreen()">13</a>
         <div class="tabs">
-            <div class="inactive" id="details">Details</div>
-            <div class="inactive" id="removed">Recently Removed</div>
-            <div class="inactive" id="newProgram">Add New</div>
+            <div class="bottomBorder"></div>
+            <div class="tabLocation">
+                <div class="inactive" id="details">Details</div>
+                <div class="inactive" id="removed">Recently Removed</div>
+                <div class="inactive" id="newProgram">Add New</div>
+            </div>
         </div>
         <div id="sideScreen"></div>
     </div>
@@ -41,7 +44,7 @@
         </button>
         <div class="timeFrame" id="timeFrame">
             <button class="previousTimeFrame" id="previousTimeFrame" onclick="swapTimeView(this.id)">previous</button>
-            <div class="currentTimeFrame" id="currentTimeFrame">Week</div>
+            <div class="currentTimeFrame" id="currentTimeFrame">Day</div>
             <button class="nextTimeFrame" id="nextTimeFrame" onclick="swapTimeView(this.id)">next</button>
         </div>
         <div class="calendarOverview" id="calendarOverview">
