@@ -57,7 +57,7 @@ firebase.database().ref('/').once('value').then((snapshot) => {
     homeSideScreen();
 
     oldData = JSON.stringify(data);
-    document.getElementById('submitChanges').style.background = 'lightgreen';
+    document.getElementById('submitImg').style.background = 'lightgreen';
 });
 
 
@@ -1775,6 +1775,7 @@ function showTime(time) {
 function submit() {
     console.log('submitted')
     firebase.database().ref('/').set(data);
+    document.getElementById('submitImg').style.background = 'lightgreen';
 }
 
 function calendarClickDay(tempDay, tempMonth, temptimeFrame) {
@@ -1843,7 +1844,7 @@ function removeProgram() {
 
 setInterval(function() {
     if (oldData != JSON.stringify(data)) {
-        document.getElementById('submitChanges').style.background = 'red';
+        document.getElementById('submitImg').style.background = 'red';
         oldData = JSON.stringify(data);
     }
 }, 500);
