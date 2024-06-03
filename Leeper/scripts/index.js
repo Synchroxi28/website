@@ -1775,7 +1775,6 @@ function showTime(time) {
 function submit() {
     console.log('submitted')
     firebase.database().ref('/').set(data);
-    document.getElementById('submitChanges').style.background = 'lightgreen';
 }
 
 function calendarClickDay(tempDay, tempMonth, temptimeFrame) {

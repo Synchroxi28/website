@@ -310,6 +310,7 @@
     width: 75px;
     height: 75px;
     border-radius: 12px;
+    background: lightgreen;
 }
 .adminNames {
     position: relative;
