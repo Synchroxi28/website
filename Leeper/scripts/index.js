@@ -1557,8 +1557,8 @@ function showDay(firstDayShown) {
             var gridPerSquare = document.createElement('div');
             gridPerSquare.setAttribute('class', 'gridPerSquareDay');
             gridPerSquare.setAttribute('id', Object.keys(data[Object.keys(data)[0]])[i] + ',' + daysOnCalendar[x] + ',gridPerSqaure');
-            gridPerSquare.style.gridTemplateRows = 'repeat(1,150px)';
-            gridPerSquare.style.gridTemplateColumns = 'repeat(1,150px)';
+            gridPerSquare.style.gridTemplateRows = 'repeat(1,29.9vw)';
+            gridPerSquare.style.gridTemplateColumns = 'repeat(1,29.9vw)';
             machinePrograms.append(gridPerSquare);
 
             var squareBlank = document.createElement('div');
