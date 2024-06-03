@@ -227,7 +227,7 @@
 }
 .timeFrame { 
     position: fixed;
-    top:20vh;
+    top:28vh;
     gap: 20px;
     z-index: 920;
 }
@@ -242,34 +242,36 @@
 }
 .currentTimeFrame {
     position:fixed;
-    left:85.8vw;
+    left:86.6vw;
+    top:27.3vh;
+    font-size: 1.5vw;
 }
 .nextTimeFrame {
     position:fixed;
-    left:89vw;
+    left:92vw;
 }
 .calendarChanges {
     position:fixed;
-    width:300px;
-    height: 1000px;
-    left: 1600px;
+    width:100%;
+    height: 100%;
+    left: 78vw;
     background: white;
     border: 2px solid white;
     z-index: 990;
 }
 .calendarOverview {
     position: fixed;
-    top: 25vh;
+    top: 35vh;
     left: 80vw;
-    width: 280px;
-    height: 200px;
+    width: 18.2vw;
+    height: 27.5vh;
     border: 1px solid black;
 }
 .calendarOverviewRow {
     position: relative;
     display: grid;
-    grid-template-columns: repeat(7, 40px);
-    grid-template-rows: repeat(1, 40px);
+    grid-template-columns: repeat(7, 2.6vw);
+    grid-template-rows: repeat(1, 5.5vh);
 }
 .calendarOverviewBox {
     position: relative;
@@ -280,12 +282,12 @@
 }
 .submitChanges {
     position:fixed;
-    top: 5vh;
-    left: 85vw;
+    top: 10vh;
+    left: 86vw;
     z-index: 998;
     border: none;
-    height: 72px;
-    width: 75px;
+    height: 10vh;
+    width: 5vw;
     border-radius: 12px;
 }
 .submitChanges:active { 
