@@ -712,6 +712,8 @@ function newProgram() {
     detailVariable.setAttribute('class', 'newOverviewTest');
     detailVariable.setAttribute('id', 'newOverviewTest');
     detailDiv.append(detailVariable);
+
+    /*
     var tempDay = 1;
     var tempGetDay = new Date(year + '-' + month + '-' + tempDay);
     var tempMonthOverview = month
@@ -733,6 +735,7 @@ function newProgram() {
             tempDay = tempDay + 1;
         }
     }
+    */
 
     detailVariable = document.createElement('div');
     detailVariable.setAttribute('class', 'machineAssignedAdd');
@@ -772,6 +775,11 @@ function newProgram() {
     detailVariable.setAttribute('class', 'startMonthInput');
     detailVariable.setAttribute('id', 'startMonthInput');
     detailVariable.value = 'Empty';
+    detailDiv.append(detailVariable);
+
+    detailVariable = document.createElement('div');
+    detailVariable.setAttribute('class', 'monthNameAwareness');
+    detailVariable.innerText = 'Only put the first 3 letters of the month';
     detailDiv.append(detailVariable);
 
     detailVariable = document.createElement('div');

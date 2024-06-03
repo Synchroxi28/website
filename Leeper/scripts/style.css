@@ -389,3 +389,7 @@
     top: 2vh;
     font-size: 200%;
 }
+.monthNameAwareness {
+    position: absolute;
+    top: 50vh;
+}
