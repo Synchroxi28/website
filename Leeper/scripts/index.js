@@ -29,7 +29,7 @@ var day = currentDate.split(' ')[2];
 var month = currentDate.split(' ')[1];
 var year = parseInt(currentDate.split(' ')[3]);
 var daysOfTheWeek = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-var months = ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec'];
+var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 var monthsFull = ['january', 'february', 'april', 'may', 'june', 'july', 'augest', 'september', 'october', 'november', 'december']
 var daysInEachMonth = [31,28,31,30,31,30,31,31,30,31,30,31];
 var calendarOverviewPreviousMonth;
@@ -1533,7 +1533,7 @@ function showDay(firstDayShown) {
     }
 
     var calendarMachines = document.getElementById('calendarMachines');
-    calendarMachines.style.gridTemplateRows = 'repeat(' + String(Object.keys(data[Object.keys(data)[0]]).length) + ',150px)';
+    calendarMachines.style.gridTemplateRows = 'repeat(' + String(Object.keys(data[Object.keys(data)[0]]).length) + ',20vh)';
     for (let i = 0; i < Object.keys(data[Object.keys(data)[0]]).length; i++) {
         var machines = document.createElement('div');
 
@@ -1627,7 +1627,7 @@ function showDay(firstDayShown) {
                         var gridTemplateRows = parseFloat((gridTemplate.split('(')[1]).split(',')[0]) + 1;
                         var gridTemplateSize = parseFloat(((gridTemplate.split('(')[1]).split(',')[1]).split('p')[0]) * (gridTemplateRows - 1) / gridTemplateRows;
 
-                        specificSquare.parentNode.style.gridTemplateRows = String('repeat(' + gridTemplateRows + ',' + gridTemplateSize + 'px)');
+                        specificSquare.parentNode.style.gridTemplateRows = String('repeat(' + gridTemplateRows + ',' + gridTemplateSize + 'vw)');
                         
                         specificSquare.parentNode.append(programSpecific);
                         
@@ -1784,6 +1784,7 @@ function calendarOverview() {
     var tempDay = 1;
     var tempGetDay = new Date(year + '-' + month + '-' + tempDay);
     var tempMonthOverview = month
+    console.log(month)
 
     if (String(tempGetDay).split(' ')[0] != 'Sun') {
         tempDay = daysInEachMonth[months.indexOf(tempMonthOverview) - 1] + (tempDay - (daysOfTheWeek.indexOf(String(tempGetDay).split(' ')[0])));
