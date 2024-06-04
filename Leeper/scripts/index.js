@@ -30,7 +30,7 @@ var month = currentDate.split(' ')[1];
 var year = parseInt(currentDate.split(' ')[3]);
 var daysOfTheWeek = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-var monthsFull = ['january', 'february', 'april', 'may', 'june', 'july', 'augest', 'september', 'october', 'november', 'december']
+var monthsFull = ['January', 'February', 'April', 'May', 'June', 'July', 'Augest', 'September', 'October', 'November', 'December']
 var daysInEachMonth = [31,28,31,30,31,30,31,31,30,31,30,31];
 var calendarOverviewPreviousMonth;
 var daysOnCalendar = [];
@@ -495,7 +495,7 @@ function editDetails(elementID) {
 
     for (let i = 0; i < daysOnCalendar.length; i++) {
         try {
-            document.getElementById(selectedProgram.split('day')[0] + 'day' + i).style.background = 'rgb(252, 47, 47)';
+            document.getElementById(selectedProgram.split('day')[0] + 'day' + i).style.background = 'rgb(3, 165, 219)';
         } catch(e) {
         }
     }
@@ -1792,12 +1792,18 @@ function calendarOverview() {
     var tempDay = 1;
     var tempGetDay = new Date(year + '-' + month + '-' + tempDay);
     var tempMonthOverview = month
-    console.log(month)
 
     if (String(tempGetDay).split(' ')[0] != 'Sun') {
-        tempDay = daysInEachMonth[months.indexOf(tempMonthOverview) - 1] + (tempDay - (daysOfTheWeek.indexOf(String(tempGetDay).split(' ')[0])));
-        tempMonthOverview = months[months.indexOf(tempMonthOverview) - 1]
+        if (months.indexOf(month) == 0) {
+            tempDay = parseInt(daysInEachMonth.slice(-1)) + (tempDay - (daysOfTheWeek.indexOf(String(tempGetDay).split(' ')[0])));
+            tempMonthOverview = String(months.slice(-1))
+        } else {
+            tempDay = daysInEachMonth[months.indexOf(tempMonthOverview) - 1] + (tempDay - (daysOfTheWeek.indexOf(String(tempGetDay).split(' ')[0])));
+            tempMonthOverview = months[months.indexOf(tempMonthOverview) - 1]
+        }
     }
+
+    console.log(tempMonthOverview)
     for (let x = 0; x < 5; x++) {
         var rows = document.createElement('div');
         rows.setAttribute('class', 'calendarOverviewRow');
@@ -1806,7 +1812,11 @@ function calendarOverview() {
         for (let x = 0; x < 7; x++) {
             if (tempDay > daysInEachMonth[months.indexOf(tempMonthOverview)]) {
                 tempDay = 1;
-                tempMonthOverview = months[months.indexOf(tempMonthOverview) + 1];
+                if (months.indexOf(tempMonthOverview) >= 10) {
+                    tempMonthOverview = months[0];
+                } else {
+                    tempMonthOverview = months[months.indexOf(tempMonthOverview) + 1];
+                }
             }
             var box = document.createElement('div');
             box.setAttribute('class', 'calendarOverviewBox');
@@ -1819,7 +1829,10 @@ function calendarOverview() {
     }
 
     for (let x = 0; x < daysOnCalendar.length; x++) {
-        document.getElementById('calendarOverviewBox,' + daysOnCalendar[x] + ',' + document.getElementById('calendarDates').children[x].classList[1]).style.background = 'lightblue';
+        try {
+            document.getElementById('calendarOverviewBox,' + daysOnCalendar[x] + ',' + document.getElementById('calendarDates').children[x].classList[1]).style.background = 'lightblue';
+        } catch(e) {
+        }
     }
 }
 

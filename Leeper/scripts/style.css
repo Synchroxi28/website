@@ -67,7 +67,7 @@
     font-size: 40px;
     left: 35%;
     top: 10%;
-    width: 200px;
+    width: 5vw;
 }
 .machineSquare {
     background: white;
@@ -381,4 +381,9 @@
 .monthNameAwareness {
     position: absolute;
     top: 50vh;
+}
+.changeDetails, .noRecycle {
+    position: relative;
+    top: 20vh;
+    left: 1vw;
 }
