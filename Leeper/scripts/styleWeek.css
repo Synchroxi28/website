@@ -2,7 +2,7 @@
 .entireCalendarWeek { 
     position:absolute;
     left: 28vw;
-    top:20vh;
+    top:24vh;
     height: 15%;
     width: 100%;
 }
@@ -23,18 +23,18 @@
     grid-template-columns: repeat(7, 7vw);
     grid-template-rows: repeat(1, 100%);
     position: relative;
-    top: 6vh;
+    top: 4vh;
     left: 8.22vw;
     width: 49.9vw;
     height: 10vh;
-    font-size: 3vw;
+    font-size: 2.5vw;
     font-weight: 700;
     grid-gap: .4vh;
 }
 .calendarMachinesWeek {
     position: absolute;
     padding-top: 1px;
-    top:20vh;
+    top:24vh;
     left: 21%;
     grid-template-columns: repeat(1, 7.1vw);
     float:left;
@@ -54,4 +54,5 @@
     text-align: center;
     opacity: '1';
     width: 101%;
+    font-size: 3vw;
 }

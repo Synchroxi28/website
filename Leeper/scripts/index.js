@@ -30,11 +30,21 @@ var month = currentDate.split(' ')[1];
 var year = parseInt(currentDate.split(' ')[3]);
 var daysOfTheWeek = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-var monthsFull = ['January', 'February', 'April', 'May', 'June', 'July', 'Augest', 'September', 'October', 'November', 'December']
+var monthsFull = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'Augest', 'September', 'October', 'November', 'December']
 var daysInEachMonth = [31,28,31,30,31,30,31,31,30,31,30,31];
 var calendarOverviewPreviousMonth;
 var daysOnCalendar = [];
 var selectedProgram;
+
+var newProgDateTF = false
+var newProgDatesArray = []
+var newProgStartDay = 0;
+var newProgEndDay = 0;
+var newProgStartMonth = 'Empty';
+var newProgEndMonth = 'Empty';
+var NewProgIdArray = [];
+var newProgTempMonthCalendar = '';
+var newProgTempYearCalendar = 0;
 
 var calendarDates = document.getElementById('calendarDates');
 var startDay = day - daysOfTheWeek.indexOf(currentDate.split(' ')[0]);
@@ -58,6 +68,8 @@ firebase.database().ref('/').once('value').then((snapshot) => {
 
     oldData = JSON.stringify(data);
     document.getElementById('submitImg').style.background = 'lightgreen';
+    newProgTempMonthCalendar = month;
+    newProgTempYearCalendar = year;
 });
 
 
@@ -232,7 +244,7 @@ function handleDrop(e) {
 
 
         startDay = parseInt(document.getElementById('calendarDates').children[0].innerText)
-        month = document.getElementById('monthYearVisible').innerText.split(' ')[0]
+        month = months[monthsFull.indexOf(document.getElementById('monthYearVisible').innerText.split(' ')[0])]
 
         showTime(document.getElementById('currentTimeFrame').innerText)
 
@@ -686,6 +698,9 @@ function removed() {
 }
 
 function newProgram() {
+
+    newProgDatesArray = [];
+
     document.getElementById('sideScreen').remove();
     document.getElementById('details').setAttribute('class', 'inactive');
     document.getElementById('removed').setAttribute('class', 'inactive');
@@ -708,115 +723,76 @@ function newProgram() {
     detailVariable.value = 'Empty';
     detailDiv.append(detailVariable);
 
+
+
     var detailVariable = document.createElement('div');
-    detailVariable.setAttribute('class', 'newOverviewTest');
-    detailVariable.setAttribute('id', 'newOverviewTest');
+    detailVariable.setAttribute('class', 'newProgPreviousNextMonth');
+    detailVariable.setAttribute('id', 'newProgPreviousNextMonth');
     detailDiv.append(detailVariable);
+    var detailVariable2 = document.createElement('button');
+    detailVariable2.setAttribute('class', 'newProgPreviousMonth');
+    detailVariable2.setAttribute('id', 'newProgPreviousMonth');
+    detailVariable2.setAttribute('onclick', 'newProgramDatePrevious()');
+    detailVariable2.innerText = '<';
+    detailVariable.append(detailVariable2);
+    var detailVariable2 = document.createElement('div');
+    detailVariable2.setAttribute('class', 'newProgMonthName');
+    detailVariable2.setAttribute('id', 'newProgMonthName');
+    detailVariable2.innerText = 'title';
+    detailVariable.append(detailVariable2);
+    var detailVariable2 = document.createElement('button');
+    detailVariable2.setAttribute('class', 'newProgNextMonth');
+    detailVariable2.setAttribute('id', 'newProgNextMonth');
+    detailVariable2.setAttribute('onclick', 'newProgramDateNext()');
+    detailVariable2.innerText = '>';
+    detailVariable.append(detailVariable2);
 
-    /*
-    var tempDay = 1;
-    var tempGetDay = new Date(year + '-' + month + '-' + tempDay);
-    var tempMonthOverview = month
-    for (let x = 0; x < 5; x++) {
-        var rows = document.createElement('div');
-        rows.setAttribute('class', 'calendarOverviewRowTest');
-        document.getElementById('newOverviewTest').append(rows);
 
-        for (let x = 0; x < 7; x++) {
-            if (tempDay > daysInEachMonth[months.indexOf(tempMonthOverview)]) {
-                tempDay = 1;
-                tempMonthOverview = months[months.indexOf(tempMonthOverview) + 1];
-            }
-            var box = document.createElement('div');
-            box.setAttribute('class', 'calendarOverviewBoxTest');
-            box.setAttribute('id', 'calendarOverviewBox,' + tempDay + ',' + tempMonthOverview);
-            box.innerText = tempDay;
-            rows.append(box);
-            tempDay = tempDay + 1;
-        }
-    }
-    */
 
-    detailVariable = document.createElement('div');
+
+    
+    var detailVariable = document.createElement('div');
+    detailVariable.setAttribute('class', 'StartEndDayBox');
+    detailVariable.setAttribute('id', 'StartEndDayBox');
+    detailVariable.setAttribute('onclick', 'newProgDateStartEnd()');
+    detailDiv.append(detailVariable);
+    var detailVariable2 = document.createElement('div');
+    detailVariable2.setAttribute('class', 'newProgStart');
+    detailVariable2.setAttribute('id', 'newProgStart');
+    detailVariable2.innerText = 'Start';
+    detailVariable.append(detailVariable2);
+    var detailVariable2 = document.createElement('div');
+    detailVariable2.setAttribute('class', 'newProgEnd');
+    detailVariable2.setAttribute('id', 'newProgEnd');
+    detailVariable2.innerText = 'End';
+    detailVariable.append(detailVariable2);
+
+    newProgramDateCalendar(detailDiv, newProgTempMonthCalendar, newProgTempYearCalendar);
+
+    detailVariable = document.createElement('select');
     detailVariable.setAttribute('class', 'machineAssignedAdd');
+    detailVariable.setAttribute('id', 'machineAssignedAdd');
     detailVariable.innerText = 'Machine Assigned: ';
     detailDiv.append(detailVariable);
-    detailVariable = document.createElement('input');
-    detailVariable.setAttribute('class', 'machineAssignedInput');
-    detailVariable.setAttribute('id', 'machineAssignedInput');
-    detailVariable.value = 'Empty';
-    detailDiv.append(detailVariable);
 
-    detailVariable = document.createElement('div');
-    detailVariable.setAttribute('class', 'startDateAdd');
-    detailVariable.innerText = 'Date Started: ';
-    detailDiv.append(detailVariable);
-    detailVariable = document.createElement('input');
-    detailVariable.setAttribute('class', 'startDateInput');
-    detailVariable.setAttribute('id', 'startDateInput');
-    detailVariable.value = 0;
-    detailDiv.append(detailVariable);
+    for (let x = 0; x < document.getElementById('calendarMachines').childElementCount; x++) {
+        detailVariable2 = document.createElement('option');
+        var tempName = document.getElementById('calendarMachines').children[x].innerText;
+        detailVariable2.setAttribute('value', tempName);
+        detailVariable2.innerText = tempName;
+        detailVariable.append(detailVariable2);
+    }
 
-    detailVariable = document.createElement('div');
-    detailVariable.setAttribute('class', 'endDateAdd');
-    detailVariable.innerText = 'Date Finished: ';
+    detailVariable = document.createElement('button');
+    detailVariable.setAttribute('class', 'finishNewProgButton');
+    detailVariable.setAttribute('onclick', 'insertNewProgram()');
+    detailVariable.innerText = 'Finish New Program';
     detailDiv.append(detailVariable);
-    detailVariable = document.createElement('input');
-    detailVariable.setAttribute('class', 'endDateInput');
-    detailVariable.setAttribute('id', 'endDateInput');
-    detailVariable.value = 0;
-    detailDiv.append(detailVariable);
-
-    detailVariable = document.createElement('div');
-    detailVariable.setAttribute('class', 'startMonthAdd');
-    detailVariable.innerText = 'Month Started: ';
-    detailDiv.append(detailVariable);
-    detailVariable = document.createElement('input');
-    detailVariable.setAttribute('class', 'startMonthInput');
-    detailVariable.setAttribute('id', 'startMonthInput');
-    detailVariable.value = 'Empty';
-    detailDiv.append(detailVariable);
-
-    detailVariable = document.createElement('div');
-    detailVariable.setAttribute('class', 'monthNameAwareness');
-    detailVariable.innerText = 'Only put the first 3 letters of the month';
-    detailDiv.append(detailVariable);
-
-    detailVariable = document.createElement('div');
-    detailVariable.setAttribute('class', 'endMonthAdd');
-    detailVariable.innerText = 'Month Ended: ';
-    detailDiv.append(detailVariable);
-    detailVariable = document.createElement('input');
-    detailVariable.setAttribute('class', 'endMonthInput');
-    detailVariable.setAttribute('id', 'endMonthInput');
-    detailVariable.value = 'Empty';
-    detailDiv.append(detailVariable);
-
-    detailVariable = document.createElement('div');
-    detailVariable.setAttribute('class', 'yearAdd');
-    detailVariable.innerText = 'Year Started: ';
-    detailDiv.append(detailVariable);
-    detailVariable = document.createElement('input');
-    detailVariable.setAttribute('class', 'yearInput');
-    detailVariable.setAttribute('id', 'yearInput');
-    detailVariable.value = 0;
-    detailDiv.append(detailVariable);
-
-    var recycleCalendar = document.createElement('div')
-    recycleCalendar.setAttribute('class', 'recycleCalendar');
-    recycleCalendar.setAttribute('id', 'newProgCalendar');
-    detailDiv.append(recycleCalendar)
 
 
     //element = document.getElementById("newProgram") 
     //element.addEventListener("click", addNewProgram);
 
-    elementEnter = document.getElementById("progNameInput") 
-    elementEnter.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            insertNewProgram();
-        }
-    });
 
     elementEnter = document.getElementById("machineAssignedInput") 
     elementEnter.addEventListener('keydown', (event) => {
@@ -824,106 +800,206 @@ function newProgram() {
             insertNewProgram();
         }
     });
+}
 
-    elementEnter = document.getElementById("startDateInput") 
-    elementEnter.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            insertNewProgram();
-        }
-    });
+function newProgramDateCalendar(div) {
 
-    elementEnter = document.getElementById("endDateInput") 
-    elementEnter.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            insertNewProgram();
-        }
-    });
+    var tempDay = 1;
+    var tempGetDay = new Date(newProgTempYearCalendar + '-' + newProgTempMonthCalendar + '-' + tempDay);
+    var tempMonthOverview = newProgTempMonthCalendar
 
-    elementEnter = document.getElementById("startMonthInput") 
-    elementEnter.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            insertNewProgram();
-        }
-    });
+    var calendar = document.createElement('div');
+    calendar.setAttribute('class', 'newProgramCalendar');
+    calendar.setAttribute('id', 'newProgramCalendar');
 
-    elementEnter = document.getElementById("endMonthInput") 
-    elementEnter.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            insertNewProgram();
-        }
-    });
+    try {
+        document.getElementById('newProgramCalendar').remove();
+        div.insertBefore(calendar, document.getElementById('machineAssignedAdd'));
+    } catch (e) {
+        div.append(calendar);
+    }
+    document.getElementById('newProgMonthName').innerText = newProgTempMonthCalendar
 
-    elementEnter = document.getElementById("yearInput") 
-    elementEnter.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            insertNewProgram();
+    if (String(tempGetDay).split(' ')[0] != 'Sun') {
+        if (months.indexOf(month) == 0) {
+            tempDay = parseInt(daysInEachMonth.slice(-1)) + (tempDay - (daysOfTheWeek.indexOf(String(tempGetDay).split(' ')[0])));
+            tempMonthOverview = String(months.slice(-1))
+        } else {
+            tempDay = daysInEachMonth[months.indexOf(tempMonthOverview) - 1] + (tempDay - (daysOfTheWeek.indexOf(String(tempGetDay).split(' ')[0])));
+            tempMonthOverview = months[months.indexOf(tempMonthOverview) - 1]
         }
-    });
+    }
+
+    for (let x = 0; x < 5; x++) {
+        var rows = document.createElement('div');
+        rows.setAttribute('class', 'newProgramCalendarRow');
+        rows.setAttribute('id', 'newProgramCalendarRow' + x);
+        calendar.append(rows);
+
+        for (let x = 0; x < 7; x++) {
+            if (tempDay > daysInEachMonth[months.indexOf(tempMonthOverview)]) {
+                tempDay = 1;
+                if (months.indexOf(tempMonthOverview) >= 10) {
+                    tempMonthOverview = months[0];
+                } else {
+                    tempMonthOverview = months[months.indexOf(tempMonthOverview) + 1];
+                }
+            }
+            var box = document.createElement('div');
+            box.setAttribute('class', 'newProgramCalendarBox');
+            box.setAttribute('id', 'newProgramCalendarBox,' + tempDay + ',' + tempMonthOverview);
+            box.setAttribute('onclick', 'newProgDate(this.id)')
+            box.innerText = tempDay;
+            rows.append(box);
+            tempDay = tempDay + 1;
+        }
+    }
+
+    var progDaysActive = []
+
+    for (let x = 0; x < progDaysActive.length; x++) {
+        try {
+            document.getElementById('newProgramCalendarBox,' + daysOnCalendar[x] + ',' + document.getElementById('calendarDates').children[x].classList[1]).style.background = 'lightblue';
+        } catch(e) {
+        }
+    }
+}
+
+function newProgramDatePrevious() {
+    newProgTempMonthCalendar = months[months.indexOf(newProgTempMonthCalendar) - 1]
+    newProgramDateCalendar(document.getElementById('sideScreen'), newProgTempMonthCalendar, newProgTempYearCalendar)
+}
+function newProgramDateNext() {
+    newProgTempMonthCalendar = months[months.indexOf(newProgTempMonthCalendar) + 1]
+    newProgramDateCalendar(document.getElementById('sideScreen'), newProgTempMonthCalendar, newProgTempYearCalendar)
+}
+
+function newProgDateStartEnd(){
+    newProgDateTF = !newProgDateTF
+    if (newProgDateTF == false) {
+        document.getElementById('StartEndDayBox').style.background = 'linear-gradient(to right, lightgreen 50%, white 0%)'
+    } else {
+        document.getElementById('StartEndDayBox').style.background = 'linear-gradient(to left, red 50%, white 0%)'
+    }
+}
+
+function newProgDate(id) {
+    console.log(id)
+    var newProgDaysBetween = 0;
+
+    if (newProgDateTF == false) {
+        newProgDateTF = !newProgDateTF;
+        newProgDatesArray[0] = (String(id.split(',')[1]) + ':' + String(id.split(',')[2]));
+        document.getElementById('StartEndDayBox').style.background = 'linear-gradient(to left, red 50%, white 0%)';
+        
+        if (newProgDatesArray.length < 2){
+            newProgDatesArray[newProgDate.length] = (String(id.split(',')[1]) + ':' + String(id.split(',')[2]));
+        }
+    } else {
+        var monthIsBefore = false;
+        var monthIsAfter = false;
+        if (newProgDatesArray.length < 2) {
+            newProgDatesArray[0] = (String(id.split(',')[1]) + ':' + String(id.split(',')[2]));
+            newProgDatesArray[newProgDate.length] = (String(id.split(',')[1]) + ':' + String(id.split(',')[2]));
+        } else {
+            if (months.indexOf(newProgDatesArray[0].split(':')[1]) > months.indexOf(id.split(',')[2])) {
+                monthIsBefore = true;
+            }
+            if (months.indexOf(newProgDatesArray[0].split(':')[1]) < months.indexOf(id.split(',')[2])) {
+                monthIsAfter = true;
+            }
+            if ((monthIsBefore == false && parseInt(newProgDatesArray[0].split(':')[0]) <= parseInt(id.split(',')[1])) || (monthIsAfter == true)) {
+                newProgDatesArray[newProgDate.length] = (String(id.split(',')[1]) + ':' + String(id.split(',')[2]));
+            }
+            console.log(monthIsAfter)
+        }
+    }
+
+    if (newProgDatesArray.length > 1) {
+        console.log(months.slice(parseInt(months.indexOf(newProgDatesArray[0].split(':')[1])), parseInt(months.indexOf((newProgDatesArray.slice(-1))[0].split(':')[1])) + 1).length);
+        var tempMonths = months.slice(parseInt(months.indexOf(newProgDatesArray[0].split(':')[1])), parseInt(months.indexOf((newProgDatesArray.slice(-1))[0].split(':')[1])) + 1);
+        for (let i = 0; i < tempMonths.length; i++) {
+            newProgDaysBetween = newProgDaysBetween + daysInEachMonth[months.indexOf(tempMonths[i])];
+        }
+        newProgDaysBetween = newProgDaysBetween - parseInt(newProgDatesArray[0].split(':')[0]) - (daysInEachMonth[months.indexOf(tempMonths.slice(-1)[0])] - parseInt((newProgDatesArray.slice(-1))[0].split(':')[0]))
+    }
+
+    var tempNewProgDay = parseInt(newProgDatesArray[0].split(':')[0])
+    var tempNewProgMonthArrayNum = 0;
+    NewProgIdArray = [];
+    for (let i = 0; i < newProgDaysBetween + 1; i++) {
+        NewProgIdArray.push('newProgramCalendarBox,' + tempNewProgDay + ',' + tempMonths[tempNewProgMonthArrayNum]);
+        tempNewProgDay = tempNewProgDay + 1
+        if (tempNewProgDay > daysInEachMonth[months.indexOf(tempMonths[tempNewProgMonthArrayNum])]) {
+            tempNewProgDay = 1;
+            tempNewProgMonthArrayNum = tempNewProgMonthArrayNum + 1;
+        }
+    }
+
+    showNewProgDates();
+}
+
+function showNewProgDates() {
+
+    for (let y = 0; y < document.getElementById('newProgramCalendar').childElementCount; y++) {
+        for (let x = 0; x < document.getElementById('newProgramCalendarRow' + y).childElementCount; x++) {
+            if (NewProgIdArray.includes(document.getElementById('newProgramCalendarRow' + y).children[x].id)) {
+                document.getElementById(document.getElementById('newProgramCalendarRow' + y).children[x].id).style.background = 'lightblue';
+            } else {
+                document.getElementById(document.getElementById('newProgramCalendarRow' + y).children[x].id).style.background = 'white';
+            }
+        }
+    }
+
+    newProgStartDay = newProgDatesArray[0].split(':')[0]
+    newProgEndDay = newProgDatesArray.slice(-1)[0].split(':')[0]
+    newProgStartMonth = newProgDatesArray[0].split(':')[1]
+    newProgEndMonth = newProgDatesArray.slice(-1)[0].split(':')[1]
 }
 
 function insertNewProgram() {
 
-    var name = document.getElementById('progNameInput').value
-    var machineName = document.getElementById('machineAssignedInput').value
+    var name = document.getElementById('progNameInput').value;
+    var machineName = document.getElementById('machineAssignedAdd').value;
+    /*
     var startDay = parseInt(document.getElementById('startDateInput').value)
     var endDay = parseInt(document.getElementById('endDateInput').value)
     var startMonth = document.getElementById('startMonthInput').value
     var endMonth = document.getElementById('endMonthInput').value
-    var year = parseInt(document.getElementById('yearInput').value)
+    */
+    var year = '2024'
 
-    if (startDay != 0 || endDay != 0 || startMonth != 'Empty' || endMonth != 'Empty' || year != 0 || machineName != "Empty") {
+    if (newProgStartDay != 0 || newProgEndDay != 0 || newProgStartMonth != 'Empty' || newProgEndMonth != 'Empty' || year != 0 || machineName != "Empty") {
 
         var newObject = {
             [name]: {
-                startDay:startDay,
-                endDay:endDay,
+                startDay:parseInt(newProgStartDay),
+                endDay:parseInt(newProgEndDay),
                 machine:machineName,
-                startMonth:startMonth,
-                endMonth:endMonth,
-                year:year,
+                startMonth:newProgStartMonth,
+                endMonth:newProgEndMonth,
+                year:parseInt(year),
             }
         }
         
         Object.assign(data['projects'], newObject)
-
-        var detailVariable = document.createElement('div');
-        detailVariable.setAttribute('class', 'trash');
-        detailVariable.setAttribute('draggable', 'true');
-        detailVariable.style.opacity = '1';
-        detailVariable.style.background = 'lightblue';
-
-        var detailVariableName = document.createElement('div');
-        detailVariableName.setAttribute('class', 'programName')
-        detailVariableName.innerText = name;
-        detailVariable.append(detailVariableName);
-
-        detailVariable.setAttribute('id', machineName + ',' + startDay + '-' + endDay + ',squareProgram' + ',' + name + ',day0');
-        document.getElementById('newProgCalendar').append(detailVariable);
-
-        items1 = document.querySelectorAll('.recycleCalendar, .trash');
-        items1.forEach(function(item1) {
-            item1.addEventListener('dragstart', handleDragStart, false);
-            item1.addEventListener('dragenter', handleDragEnter, false);
-            item1.addEventListener('dragover', handleDragOver, false);
-            item1.addEventListener('dragleave', handleDragLeave, false);
-            item1.addEventListener('drop', handleDrop, false);
-            item1.addEventListener('dragend', handleDragEnd, false);
-        });
+        
     } else {
         var newObject = {
             [name]: {
-                startDay:daysOnCalendar[0],
-                endDay:daysOnCalendar[0],
+                startDay:parseInt(daysOnCalendar[0]),
+                endDay:parseInt(daysOnCalendar[0]),
                 machine:(document.getElementById('calendarMachines').children[0].innerText),
-                startMonth:(document.getElementById('monthYearVisible').innerText.split(' ')[0]),
-                endMonth:(document.getElementById('monthYearVisible').innerText.split(' ')[0]),
-                year:(document.getElementById('monthYearVisible').innerText.split(' ')[1]),
+                startMonth:(months[monthsFull.indexOf(document.getElementById('monthYearVisible').innerText.split(' ')[0])]),
+                endMonth:(months[monthsFull.indexOf(document.getElementById('monthYearVisible').innerText.split(' ')[0])]),
+                year:parseInt(document.getElementById('monthYearVisible').innerText.split(' ')[1]),
             }
         }
         
         Object.assign(data['projects'], newObject)
-        showTime(document.getElementById('currentTimeFrame').innerText)
     }
+    console.log(data)
+    showTime(document.getElementById('currentTimeFrame').innerText)
 }
 
 function previousMonth() {
@@ -994,7 +1070,7 @@ function showMonth(firstDayShown) {
 
     firstDayShown = 1;
     
-    document.getElementById('monthYearVisible').innerText = month + ' ' + year;
+    document.getElementById('monthYearVisible').innerText = monthsFull[months.indexOf(month)] + ' ' + year;
     var daysShown = daysInEachMonth[months.indexOf(month)];
     daysOnCalendar = [];
     calendarDates = document.getElementById('calendarDates');
@@ -1254,7 +1330,7 @@ function showWeek(firstDayShown) {
         }
     }
     
-    document.getElementById('monthYearVisible').innerText = month + ' ' + year;
+    document.getElementById('monthYearVisible').innerText = monthsFull[months.indexOf(month)] + ' ' + year;
     var daysShown = 7;
     daysOnCalendar = [];
     calendarDates = document.getElementById('calendarDates');
@@ -1374,7 +1450,6 @@ function showWeek(firstDayShown) {
                         programSpecific.append(programName);
 
                         var nameOfMachine = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['machine'];
-                        console.log(Object.keys(data[Object.keys(data)[0]]).indexOf(nameOfMachine))
                         var specificSquare = entireCalendar.children[Object.keys(data[Object.keys(data)[0]]).indexOf(nameOfMachine)].children[daysOnCalendar.indexOf(daysOnCalendar[y])].children[0];
                         programSpecific.setAttribute('id', nameOfMachine + ',' + startDayOfProject + '-' + endDayOfProject + ',squareProgram' + ',' + Object.keys(data[Object.keys(data)[1]])[i] + ',day' + y);
                         programSpecific.setAttribute('onclick', 'showDetails(this.id)');
@@ -1507,7 +1582,7 @@ function showDay(firstDayShown) {
         }
     }
     
-    document.getElementById('monthYearVisible').innerText = month + ' ' + year
+    document.getElementById('monthYearVisible').innerText = monthsFull[months.indexOf(month)] + ' ' + year
     var daysShown = 1;
     daysOnCalendar = [];
     calendarDates = document.getElementById('calendarDates');

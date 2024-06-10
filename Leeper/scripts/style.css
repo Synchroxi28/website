@@ -64,9 +64,9 @@
 }
 .monthYearVisible {
     position: relative;
-    font-size: 40px;
-    left: 35%;
-    top: 10%;
+    font-size: 2.1vw;
+    left: 30vw;
+    top: 2vh;
     width: 5vw;
 }
 .machineSquare {
@@ -385,5 +385,74 @@
 .changeDetails, .noRecycle {
     position: relative;
     top: 20vh;
+    left: 1vw;
+}
+.newProgramCalendar {
+    position: relative;
+    border: 2px solid grey;
+    top: 10vh;
+    left: 2vw;
+    width: 15.4vw;
+    height: 27.5vh;
+}
+.newProgramCalendarRow {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(7, 2.2vw);
+    grid-template-rows: repeat(1, 5.5vh);
+}
+.newProgramCalendarBox {
+    width: 2.2vw;
+    height: 5.5vh;
+    font-size: 1vw;
+    text-align: center;
+}
+.machineAssignedAdd, .machineAssignedInput {
+    position: relative;
+    top: 20vh;
+}
+.StartEndDayBox {
+    width: 6vw;
+    height: 3vh;
+    position: absolute;
+    top: 45vh;
+    left: 7vw;
+    border: 2px solid black;
+    border-radius: 0.5vw;
+    background: linear-gradient(to right, lightgreen 50%, white 0%); 
+    cursor:pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.newProgStart {
+    float: left;
+    font-size: 1vw;
+    padding-right: 0.5vw;
+    padding-left: 10%;
+    padding-top: 3%;
+}
+.newProgEnd {
+    float: right;
+    font-size: 1vw;
+    padding-left: 0.5vw;
+    padding-right:10%;
+    padding-top: 3%;
+}
+.newProgPreviousNextMonth {
+    position: absolute;
+    top: 10vh;
+    left: 6.3vw;
+}
+.newProgPreviousMonth, .newProgMonthName, .newProgNextMonth {
+    float: left;
+    margin: 0.5vw;
+}
+.finishNewProgButton {
+    position: absolute;
+    top:62vh;
     left: 1vw;
 }
