@@ -70,6 +70,7 @@
     width: 5vw;
 }
 .machineSquare {
+    position: relative;
     background: white;
     justify-content: center;
     text-align: center;
@@ -308,15 +309,15 @@
     cursor: pointer;
 }
 .removeMachineOn {
-    position:relative;
-    width:30px;
-    height:30px;
+    position:absolute;
+    width:1.5vw;
+    height:3vh;
     font-size: 20px;
     text-align: center;
-    border: 1px solid black;
+    border: 2px solid black;
     background: rgb(250, 70, 70);
-    Bottom: 450px;
-    left: 300px;
+    top: 15vh;
+    left: 16vw;
 }
 .addMachine {
     position: relative;

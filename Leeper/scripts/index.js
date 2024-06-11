@@ -1379,7 +1379,8 @@ function showWeek(firstDayShown) {
     }
 
     var calendarMachines = document.getElementById('calendarMachines');
-    calendarMachines.style.gridTemplateRows = 'repeat(' + String(Object.keys(data[Object.keys(data)[0]]).length) + ', 15%)';
+    //calendarMachines.style.gridTemplateRows = 'repeat(' + String(Object.keys(data[Object.keys(data)[0]]).length) + ', 100%)';
+
     for (let i = 0; i < Object.keys(data[Object.keys(data)[0]]).length; i++) {
         var machines = document.createElement('div');
 
@@ -1393,6 +1394,7 @@ function showWeek(firstDayShown) {
         if (i > 0) {
             machines.style.borderTop = '2px solid grey'
         }
+        machines.style.height = '14.55vh'
 
         calendarMachines.appendChild(machines);
     }
@@ -1410,7 +1412,7 @@ function showWeek(firstDayShown) {
             gridPerSquare.setAttribute('id', Object.keys(data[Object.keys(data)[0]])[i] + ',' + daysOnCalendar[x] + ',gridPerSqaure');
             gridPerSquare.style.gridTemplateRows = 'repeat(1,100%)';
             gridPerSquare.style.gridTemplateColumns = 'repeat(1,95%)';
-            
+
             if (i > 0) {
                 gridPerSquare.style.borderTop = '2px solid grey';
             }
@@ -1484,12 +1486,14 @@ function showWeek(firstDayShown) {
                             var gridTemplate = specificSquare.parentNode.style.gridTemplateRows;
                             var gridTemplateRows = parseFloat((gridTemplate.split('(')[1]).split(',')[0]) + 1;
                             //var gridTemplateSize = parseFloat(((gridTemplate.split('(')[1]).split(',')[1]).split('p')[0]) * (gridTemplateRows - 1) / gridTemplateRows;
-                            var gridTemplateSize = parseFloat(((gridTemplate.split('(')[1]).split(',')[1]).split('p')[0]);
+                            var gridTemplateSize = parseFloat(((gridTemplate.split('(')[1]).split(',')[1]).split('v')[0]);
 
                             if (gridTemplateRows > tempStackAmount) {
                                 tempStackAmount = gridTemplateRows;
                             }
                             specificSquare.parentNode.parentNode.style.paddingBottom = String((tempStackAmount - 1) * 14.8) + 'vh';
+                            var tempIndex = Array.prototype.indexOf.call(document.getElementById('entireCalendar').children, specificSquare.parentNode.parentNode);
+                            document.getElementById('calendarMachines').children[tempIndex].style.height = String((tempStackAmount) * 14.785) + 'vh'; 
                             specificSquare.parentNode.style.gridTemplateRows = String('repeat(' + gridTemplateRows + ',' + gridTemplateSize + '%)');
                             
                             specificSquare.parentNode.append(programSpecific);
@@ -1668,7 +1672,7 @@ function showDay(firstDayShown) {
             var gridPerSquare = document.createElement('div');
             gridPerSquare.setAttribute('class', 'gridPerSquareDay');
             gridPerSquare.setAttribute('id', Object.keys(data[Object.keys(data)[0]])[i] + ',' + daysOnCalendar[x] + ',gridPerSqaure');
-            gridPerSquare.style.gridTemplateRows = 'repeat(1,29.9vw)';
+            gridPerSquare.style.gridTemplateRows = 'repeat(1,20vw)';
             gridPerSquare.style.gridTemplateColumns = 'repeat(1,29.9vw)';
             machinePrograms.append(gridPerSquare);
 
@@ -1736,20 +1740,20 @@ function showDay(firstDayShown) {
                     } else {
                         var gridTemplate = specificSquare.parentNode.style.gridTemplateRows;
                         var gridTemplateRows = parseFloat((gridTemplate.split('(')[1]).split(',')[0]) + 1;
-                        var gridTemplateSize = parseFloat(((gridTemplate.split('(')[1]).split(',')[1]).split('p')[0]) * (gridTemplateRows - 1) / gridTemplateRows;
+                        var gridTemplateSize = parseFloat(((gridTemplate.split('(')[1]).split(',')[1]).split('v')[0]) * (gridTemplateRows - 1) / gridTemplateRows;
 
-                        specificSquare.parentNode.style.gridTemplateRows = String('repeat(' + gridTemplateRows + ',' + gridTemplateSize + 'vw)');
+                        specificSquare.parentNode.style.gridTemplateRows = String('repeat(' + gridTemplateRows + ',' + gridTemplateSize + 'vh)');
                         
                         specificSquare.parentNode.append(programSpecific);
                         
-                        ///
+                        /*
                         if (Math.abs(['offsetY']) > (parseFloat(((this.parentNode.style.gridTemplateRows.split('(')[1]).split(',')[1]).split('p')[0]) / 2)) {
                             this.parentNode.append(document.getElementById(newId))
                         }
                         else {
                             this.parentNode.insertBefore(document.getElementById(newId), document.getElementById(this.id).parentNode.children[0]);
                         }
-                        ///
+                        */
                     }
                     //console.log(document.getElementById('calendarRow').style.gridTemplateColumns.split(' '));
                 }

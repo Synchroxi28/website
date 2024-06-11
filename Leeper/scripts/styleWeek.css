@@ -35,7 +35,6 @@
     grid-template-columns: repeat(1, 7.1vw);
     float:left;
     font-size: 15px;
-    height: 100%;
 }
 .gridPerSquareWeek {
     display: grid;
