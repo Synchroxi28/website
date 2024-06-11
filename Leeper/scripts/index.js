@@ -126,7 +126,19 @@ function handleDrop(e) {
         //this.innerHTML = e.dataTransfer.getData('text/html');
         var fromRecycle = false;
         if (dragSrcEl.classList[0] == 'trash' && this.parentNode.id != 'recycleCalendar') {
-            data['projects'][document.getElementById(dragSrcEl.id).innerText] = data['recycle'][document.getElementById(dragSrcEl.id).innerText];
+
+            var newObject = {
+                [document.getElementById(dragSrcEl.id).innerText]: data['recycle'][document.getElementById(dragSrcEl.id).innerText]
+            }
+            if (Object.keys(data).includes('projects')){
+                Object.assign(data['projects'], newObject)
+            } else {
+                var newObject2 = {
+                    ['projects']: newObject
+                }
+                Object.assign(data, newObject2)
+            }
+
             delete data['recycle'][document.getElementById(dragSrcEl.id).innerText];
             removed();
             fromRecycle = true;
@@ -345,7 +357,14 @@ function adminAdd(elementID) {
                     [inputVariable.value]: ''
                 }
                 
-                Object.assign(data['machines'], newObject);
+                if (Object.keys(data).includes('machines')){
+                    Object.assign(data['machines'], newObject);
+                } else {
+                    var newObject2 = {
+                        ['machines']: newObject
+                    }
+                    Object.assign(data, newObject2);
+                }
                 adminProgram();
                 showTime(document.getElementById('currentTimeFrame').innerText)
             } else {
@@ -399,20 +418,22 @@ function adminProgram(){
     detailDiv.setAttribute('id', 'sideScreen');
     document.getElementById('detailList').append(detailDiv);
 
-    for (let i = 0; i < Object.keys(data[Object.keys(data)[0]]).length; i++) {
-        var tempMachineName = Object.keys(data[Object.keys(data)[0]])[i]
-
+    if (Object.keys(data).includes('machines')) {
+        for (let i = 0; i < Object.keys(data[Object.keys(data)[Object.keys(data).indexOf('machines')]]).length; i++) {
+            var tempMachineName = Object.keys(data[Object.keys(data)[Object.keys(data).indexOf('machines')]])[i]
+    
+            var detailVariable = document.createElement('div');
+            detailVariable.setAttribute('class', 'adminNames');
+            detailVariable.setAttribute('id', 'machineDetail,' + tempMachineName)
+            detailVariable.setAttribute('onclick', 'adminEdit(this.id)')
+            detailVariable.innerText = tempMachineName;
+            detailDiv.append(detailVariable);
+        }
+    
         var detailVariable = document.createElement('div');
-        detailVariable.setAttribute('class', 'adminNames');
-        detailVariable.setAttribute('id', 'machineDetail,' + tempMachineName)
-        detailVariable.setAttribute('onclick', 'adminEdit(this.id)')
-        detailVariable.innerText = tempMachineName;
-        detailDiv.append(detailVariable);
+        detailVariable.setAttribute('class', 'removeMachine');
+        document.getElementsByClassName('adminView')[0].append(detailVariable);
     }
-
-    var detailVariable = document.createElement('div');
-    detailVariable.setAttribute('class', 'removeMachine');
-    document.getElementsByClassName('adminView')[0].append(detailVariable);
 
     var detailVariable = document.createElement('div');
     detailVariable.setAttribute('class', 'addMachine');
@@ -644,6 +665,7 @@ function removed() {
 
     //check data if recycle exists
 
+    console.log(Object.keys(data[Object.keys(data)[Object.keys(data).indexOf('recycle')]]).length)
     try {
         
         var recycleCalendar = document.createElement('div')
@@ -653,7 +675,7 @@ function removed() {
 
         //for amount of recycled objects in data, if none then skip
         var rows = 0;
-        for (let i = 0; i < Object.keys(data[Object.keys(data)[2]]).length; i++) {
+        for (let i = 0; i < Object.keys(data[Object.keys(data)[Object.keys(data).indexOf('recycle')]]).length; i++) {
 
             rows = rows + 1
             recycleCalendar.style.gridTemplateRows = String('repeat(' + rows + ',' + (rows * 50) + 'px)');
@@ -666,14 +688,15 @@ function removed() {
 
             var detailVariableName = document.createElement('div');
             detailVariableName.setAttribute('class', 'programName')
-            detailVariableName.innerText = Object.keys(data[Object.keys(data)[2]])[i];
+            detailVariableName.innerText = Object.keys(data[Object.keys(data)[Object.keys(data).indexOf('recycle')]])[i];
 
             detailVariable.append(detailVariableName);
 
-            var nameOfMachine = data[Object.keys(data)[2]][Object.keys(data[Object.keys(data)[2]])[i]]['machine']
-            var startDayOfProject = data[Object.keys(data)[2]][Object.keys(data[Object.keys(data)[2]])[i]]['startDay']
-            var endDayOfProject = data[Object.keys(data)[2]][Object.keys(data[Object.keys(data)[2]])[i]]['endDay']
-            detailVariable.setAttribute('id', nameOfMachine + ',' + startDayOfProject + '-' + endDayOfProject + ',squareProgram' + ',' + Object.keys(data[Object.keys(data)[2]])[i] + ',day0');
+            var nameOfMachine = data[Object.keys(data)[Object.keys(data).indexOf('recycle')]][Object.keys(data[Object.keys(data)[Object.keys(data).indexOf('recycle')]])[i]]['machine']
+            var startDayOfProject = data[Object.keys(data)[Object.keys(data).indexOf('recycle')]][Object.keys(data[Object.keys(data)[Object.keys(data).indexOf('recycle')]])[i]]['startDay']
+            var endDayOfProject = data[Object.keys(data)[Object.keys(data).indexOf('recycle')]][Object.keys(data[Object.keys(data)[Object.keys(data).indexOf('recycle')]])[i]]['endDay']
+
+            detailVariable.setAttribute('id', nameOfMachine + ',' + startDayOfProject + '-' + endDayOfProject + ',squareProgram' + ',' + Object.keys(data[Object.keys(data)[Object.keys(data).indexOf('recycle')]])[i] + ',day0');
             recycleCalendar.append(detailVariable);
         }
 
@@ -688,6 +711,7 @@ function removed() {
         });
     }
     catch(e) {
+        console.log(e)
         var noRecycle = document.createElement('div');
         noRecycle.setAttribute('class', 'noRecycle');
         noRecycle.innerText = 'No Recycle Found';
@@ -793,14 +817,6 @@ function newProgram() {
 
     //element = document.getElementById("newProgram") 
     //element.addEventListener("click", addNewProgram);
-
-
-    elementEnter = document.getElementById("machineAssignedInput") 
-    elementEnter.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            insertNewProgram();
-        }
-    });
 }
 
 function newProgramDateCalendar(div) {
@@ -981,7 +997,7 @@ function insertNewProgram() {
     */
     var year = '2024'
 
-    if (newProgStartDay != 0 || newProgEndDay != 0 || newProgStartMonth != 'Empty' || newProgEndMonth != 'Empty' || year != 0 || machineName != "Empty") {
+    if (newProgStartDay != 0 || newProgEndDay != 0 || newProgStartMonth != 'Empty' || newProgEndMonth != 'Empty' || year != 0) {
 
         var newObject = {
             [name]: {
@@ -994,7 +1010,14 @@ function insertNewProgram() {
             }
         }
         
-        Object.assign(data['projects'], newObject)
+        if (Object.keys(data).includes('projects')) {
+            Object.assign(data['projects'], newObject);
+        } else {
+            var newObject2 = {
+                ['projects']: newObject
+            }
+            Object.assign(data, newObject2)
+        }
         
     } else {
         var newObject = {
@@ -1381,178 +1404,140 @@ function showWeek(firstDayShown) {
     var calendarMachines = document.getElementById('calendarMachines');
     //calendarMachines.style.gridTemplateRows = 'repeat(' + String(Object.keys(data[Object.keys(data)[0]]).length) + ', 100%)';
 
-    for (let i = 0; i < Object.keys(data[Object.keys(data)[0]]).length; i++) {
-        var machines = document.createElement('div');
-
-        var machineName = document.createElement('div');
-        machineName.setAttribute('class', 'machineName');
-        machineName.innerText = Object.keys(data[Object.keys(data)[0]])[i];
-
-        machines.setAttribute('class', 'machineSquare');
-        machines.append(machineName);
-
-        if (i > 0) {
-            machines.style.borderTop = '2px solid grey'
-        }
-        machines.style.height = '14.55vh'
-
-        calendarMachines.appendChild(machines);
-    }
-
-    var entireCalendar = document.getElementById('entireCalendar');
-    //set blank spaces
-    for (let i = 0; i < Object.keys(data[Object.keys(data)[0]]).length; i++) {
-        var machinePrograms = document.createElement('div');
-        machinePrograms.setAttribute('class', 'calendarRowWeek');
-        machinePrograms.setAttribute('id', 'calendarRow');
-
-        for (let x = 0; x < daysOnCalendar.length; x++) {
-            var gridPerSquare = document.createElement('div');
-            gridPerSquare.setAttribute('class', 'gridPerSquareWeek');
-            gridPerSquare.setAttribute('id', Object.keys(data[Object.keys(data)[0]])[i] + ',' + daysOnCalendar[x] + ',gridPerSqaure');
-            gridPerSquare.style.gridTemplateRows = 'repeat(1,100%)';
-            gridPerSquare.style.gridTemplateColumns = 'repeat(1,95%)';
-
+    console.log(Object.keys(data).includes('machines'))
+    if (Object.keys(data).includes('machines')) {
+        for (let i = 0; i < Object.keys(data[Object.keys(data)[Object.keys(data).indexOf('machines')]]).length; i++) {
+            var machines = document.createElement('div');
+    
+            var machineName = document.createElement('div');
+            machineName.setAttribute('class', 'machineName');
+            machineName.innerText = Object.keys(data[Object.keys(data)[Object.keys(data).indexOf('machines')]])[i];
+    
+            machines.setAttribute('class', 'machineSquare');
+            machines.append(machineName);
+    
             if (i > 0) {
-                gridPerSquare.style.borderTop = '2px solid grey';
+                machines.style.borderTop = '2px solid grey'
             }
-            machinePrograms.append(gridPerSquare);
-
-            var squareBlank = document.createElement('div');
-            squareBlank.setAttribute('class', 'squareBlank');
-            squareBlank.setAttribute('id', Object.keys(data[Object.keys(data)[0]])[i] + ',' + daysOnCalendar[x] + ',squareBlank');
-            squareBlank.setAttribute('draggable', 'true');
-            squareBlank.style.opacity = '1';
-            gridPerSquare.append(squareBlank);
+            machines.style.height = '14.55vh'
+    
+            calendarMachines.appendChild(machines);
         }
-        entireCalendar.appendChild(machinePrograms);
-
-    }
-
-    //replace with programs
-    for (let i = 0; i < Object.keys(data[Object.keys(data)[1]]).length; i++) {
-        var tempStackAmount = 0
-        var startDayOfProject = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['startDay'];
-        var endDayOfProject = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['endDay'];
-        var startMonth = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['startMonth'];
-        var endMonth = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['endMonth'];
-        var yearActive = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['year'];
-        var tempMachine = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['machine']
-
-        if (Object.keys(data[Object.keys(data)[0]]).includes(tempMachine)) {
-            var progMonths = months.slice(months.indexOf(startMonth), months.indexOf(endMonth) + 1)
-            var totalTimeOfProject = [];
-            var tempMonth = startMonth;
-            var tempIndex = startDayOfProject
-            for (let y = 0; y < progMonths.length; y++) {
-                totalTimeOfProject[y] = [];
-                for (let x = 0; x < daysInEachMonth[months.indexOf(progMonths[y])]; x++) {
-                    if (tempIndex + x > daysInEachMonth[months.indexOf(tempMonth)]) {
-                        tempMonth = months[months.indexOf(tempMonth) + 1];
-                        tempIndex = 1;
-                        break;
-                    } else if (tempIndex + x > endDayOfProject && tempMonth == endMonth) {
-                        break;
-                    } else {
-                        totalTimeOfProject[y][x] = tempIndex + x;
-                    }
+    
+        var entireCalendar = document.getElementById('entireCalendar');
+        //set blank spaces
+        for (let i = 0; i < Object.keys(data[Object.keys(data)[Object.keys(data).indexOf('machines')]]).length; i++) {
+            var machinePrograms = document.createElement('div');
+            machinePrograms.setAttribute('class', 'calendarRowWeek');
+            machinePrograms.setAttribute('id', 'calendarRow');
+    
+            for (let x = 0; x < daysOnCalendar.length; x++) {
+                var gridPerSquare = document.createElement('div');
+                gridPerSquare.setAttribute('class', 'gridPerSquareWeek');
+                gridPerSquare.setAttribute('id', Object.keys(data[Object.keys(data)[Object.keys(data).indexOf('machines')]])[i] + ',' + daysOnCalendar[x] + ',gridPerSqaure');
+                gridPerSquare.style.gridTemplateRows = 'repeat(1,100%)';
+                gridPerSquare.style.gridTemplateColumns = 'repeat(1,95%)';
+    
+                if (i > 0) {
+                    gridPerSquare.style.borderTop = '2px solid grey';
                 }
+                machinePrograms.append(gridPerSquare);
+    
+                var squareBlank = document.createElement('div');
+                squareBlank.setAttribute('class', 'squareBlank');
+                squareBlank.setAttribute('id', Object.keys(data[Object.keys(data)[Object.keys(data).indexOf('machines')]])[i] + ',' + daysOnCalendar[x] + ',squareBlank');
+                squareBlank.setAttribute('draggable', 'true');
+                squareBlank.style.opacity = '1';
+                gridPerSquare.append(squareBlank);
             }
-            //daysOnCalendar.indexOf(startDayOfProject + x) != -1  && monthActive == month && yearActive == year
-            //(months.slice(months.indexOf(startMonth), months.indexOf(endMonth) + 1)).includes(document.getElementById('calendarDates').children[daysOnCalendar.indexOf(startDayOfProject + x)].classList[1]) && yearActive == year
-            
-            for (let x = 0; x < totalTimeOfProject.length; x++) {
-                for (let y = 0; y < daysOnCalendar.length; y++) {
-                    if (document.getElementById('calendarDates').children[y].classList[1] == progMonths[x] && totalTimeOfProject[x].includes(daysOnCalendar[y]) && year == yearActive) {
-                        var programSpecific = document.createElement('div');
-                        programSpecific.setAttribute('class', 'programSquare');
-                        programSpecific.setAttribute('draggable', 'true');
-                        programSpecific.style.opacity = '1';
-                        programSpecific.style.background = 'lightblue';
+            entireCalendar.appendChild(machinePrograms);
+    
+        }
+    
+        //replace with programs
+        if (Object.keys(data).includes('projects')){
 
-                        var programName = document.createElement('div');
-                        programName.setAttribute('class', 'programName');
-                        programName.innerText = Object.keys(data[Object.keys(data)[1]])[i];
-
-                        programSpecific.append(programName);
-
-                        var nameOfMachine = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['machine'];
-                        var specificSquare = entireCalendar.children[Object.keys(data[Object.keys(data)[0]]).indexOf(nameOfMachine)].children[daysOnCalendar.indexOf(daysOnCalendar[y])].children[0];
-                        programSpecific.setAttribute('id', nameOfMachine + ',' + startDayOfProject + '-' + endDayOfProject + ',squareProgram' + ',' + Object.keys(data[Object.keys(data)[1]])[i] + ',day' + y);
-                        programSpecific.setAttribute('onclick', 'showDetails(this.id)');
-                        if (specificSquare.id.split(',')[2] == 'squareBlank') {
-                            specificSquare.replaceWith(programSpecific);
-                        } else {
-                            var gridTemplate = specificSquare.parentNode.style.gridTemplateRows;
-                            var gridTemplateRows = parseFloat((gridTemplate.split('(')[1]).split(',')[0]) + 1;
-                            //var gridTemplateSize = parseFloat(((gridTemplate.split('(')[1]).split(',')[1]).split('p')[0]) * (gridTemplateRows - 1) / gridTemplateRows;
-                            var gridTemplateSize = parseFloat(((gridTemplate.split('(')[1]).split(',')[1]).split('v')[0]);
-
-                            if (gridTemplateRows > tempStackAmount) {
-                                tempStackAmount = gridTemplateRows;
+            for (let i = 0; i < Object.keys(data[Object.keys(data)[1]]).length; i++) {
+                var tempStackAmount = 0
+                var startDayOfProject = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['startDay'];
+                var endDayOfProject = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['endDay'];
+                var startMonth = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['startMonth'];
+                var endMonth = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['endMonth'];
+                var yearActive = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['year'];
+                var tempMachine = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['machine'];
+                var tempProgName = Object.keys(data[Object.keys(data)[1]])[i];
+                console.log(tempProgName)
+        
+                if (Object.keys(data[Object.keys(data)[0]]).includes(tempMachine)) {
+                    var progMonths = months.slice(months.indexOf(startMonth), months.indexOf(endMonth) + 1)
+                    var totalTimeOfProject = [];
+                    var tempMonth = startMonth;
+                    var tempIndex = startDayOfProject
+                    for (let y = 0; y < progMonths.length; y++) {
+                        totalTimeOfProject[y] = [];
+                        for (let x = 0; x < daysInEachMonth[months.indexOf(progMonths[y])]; x++) {
+                            if (tempIndex + x > daysInEachMonth[months.indexOf(tempMonth)]) {
+                                tempMonth = months[months.indexOf(tempMonth) + 1];
+                                tempIndex = 1;
+                                break;
+                            } else if (tempIndex + x > endDayOfProject && tempMonth == endMonth) {
+                                break;
+                            } else {
+                                totalTimeOfProject[y][x] = tempIndex + x;
                             }
-                            specificSquare.parentNode.parentNode.style.paddingBottom = String((tempStackAmount - 1) * 14.8) + 'vh';
-                            var tempIndex = Array.prototype.indexOf.call(document.getElementById('entireCalendar').children, specificSquare.parentNode.parentNode);
-                            document.getElementById('calendarMachines').children[tempIndex].style.height = String((tempStackAmount) * 14.785) + 'vh'; 
-                            specificSquare.parentNode.style.gridTemplateRows = String('repeat(' + gridTemplateRows + ',' + gridTemplateSize + '%)');
-                            
-                            specificSquare.parentNode.append(programSpecific);
                         }
                     }
+                    //daysOnCalendar.indexOf(startDayOfProject + x) != -1  && monthActive == month && yearActive == year
+                    //(months.slice(months.indexOf(startMonth), months.indexOf(endMonth) + 1)).includes(document.getElementById('calendarDates').children[daysOnCalendar.indexOf(startDayOfProject + x)].classList[1]) && yearActive == year
+                    
+                    for (let x = 0; x < totalTimeOfProject.length; x++) {
+                        for (let y = 0; y < daysOnCalendar.length; y++) {
+                            if (document.getElementById('calendarDates').children[y].classList[1] == progMonths[x] && totalTimeOfProject[x].includes(daysOnCalendar[y]) && year == yearActive) {
+                                var programSpecific = document.createElement('div');
+                                programSpecific.setAttribute('class', 'programSquare');
+                                programSpecific.setAttribute('draggable', 'true');
+                                programSpecific.style.opacity = '1';
+                                programSpecific.style.background = 'lightblue';
+        
+                                var programName = document.createElement('div');
+                                programName.setAttribute('class', 'programName');
+                                programName.innerText = Object.keys(data[Object.keys(data)[1]])[i];
+        
+                                programSpecific.append(programName);
+        
+                                var nameOfMachine = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['machine'];
+                                var specificSquare = entireCalendar.children[Object.keys(data[Object.keys(data)[0]]).indexOf(nameOfMachine)].children[daysOnCalendar.indexOf(daysOnCalendar[y])].children[0];
+                                programSpecific.setAttribute('id', nameOfMachine + ',' + startDayOfProject + '-' + endDayOfProject + ',squareProgram' + ',' + Object.keys(data[Object.keys(data)[1]])[i] + ',day' + y);
+                                programSpecific.setAttribute('onclick', 'showDetails(this.id)');
+                                if (specificSquare.id.split(',')[2] == 'squareBlank') {
+                                    specificSquare.replaceWith(programSpecific);
+                                } else {
+                                    var gridTemplate = specificSquare.parentNode.style.gridTemplateRows;
+                                    var gridTemplateRows = parseFloat((gridTemplate.split('(')[1]).split(',')[0]) + 1;
+                                    //var gridTemplateSize = parseFloat(((gridTemplate.split('(')[1]).split(',')[1]).split('p')[0]) * (gridTemplateRows - 1) / gridTemplateRows;
+                                    var gridTemplateSize = parseFloat(((gridTemplate.split('(')[1]).split(',')[1]).split('v')[0]);
+        
+                                    if (gridTemplateRows > tempStackAmount) {
+                                        tempStackAmount = gridTemplateRows;
+                                    }
+                                    specificSquare.parentNode.parentNode.style.paddingBottom = String((tempStackAmount - 1) * 14.8) + 'vh';
+                                    var tempIndex = Array.prototype.indexOf.call(document.getElementById('entireCalendar').children, specificSquare.parentNode.parentNode);
+                                    document.getElementById('calendarMachines').children[tempIndex].style.height = String((tempStackAmount) * 14.785) + 'vh'; 
+                                    specificSquare.parentNode.style.gridTemplateRows = String('repeat(' + gridTemplateRows + ',' + gridTemplateSize + '%)');
+                                    
+                                    specificSquare.parentNode.append(programSpecific);
+                                }
+                            }
+                        }
+                    }
+        
+                } else if (!(Object.keys(data[Object.keys(data)[0]]).includes(tempMachine))){
+                    removeProgram(true, tempProgName)
                 }
             }
         }
-
-
-        /*
-
-        for (let x = 0; x <= totalTime1; x++) {
-            if (totalTimeOfProject[progMonths.indexOf(document.getElementById('calendarDates').children[daysOnCalendar.indexOf(startDayOfProject + x)].classList[1])].indexOf(startDayOfProject + x) != -1){
-                if ((months.slice(months.indexOf(startMonth), months.indexOf(endMonth) + 1)).includes(document.getElementById('calendarDates').children[daysOnCalendar.indexOf(startDayOfProject + x)].classList[1]) && yearActive == year) {
-                    var programSpecific = document.createElement('div');
-                    programSpecific.setAttribute('class', 'programSquare');
-                    programSpecific.setAttribute('draggable', 'true');
-                    programSpecific.style.opacity = '1';
-                    programSpecific.style.background = 'lightblue';
-
-                    var programName = document.createElement('div');
-                    programName.setAttribute('class', 'programName');
-                    programName.innerText = Object.keys(data[Object.keys(data)[1]])[i];
-
-                    programSpecific.append(programName);
-
-                    var nameOfMachine = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['machine'];
-                    var specificSquare = entireCalendar.children[Object.keys(data[Object.keys(data)[0]]).indexOf(nameOfMachine)].children[daysOnCalendar.indexOf(startDayOfProject + x)].children[0];
-                    programSpecific.setAttribute('id', nameOfMachine + ',' + startDayOfProject + '-' + endDayOfProject + ',squareProgram' + ',' + Object.keys(data[Object.keys(data)[1]])[i] + ',day' + x);
-                    programSpecific.setAttribute('onclick', 'showDetails(this.id)');
-                    if (specificSquare.id.split(',')[2] == 'squareBlank') {
-                        specificSquare.replaceWith(programSpecific);
-                    } else {
-                        var gridTemplate = specificSquare.parentNode.style.gridTemplateRows;
-                        var gridTemplateRows = parseFloat((gridTemplate.split('(')[1]).split(',')[0]) + 1;
-                        var gridTemplateSize = parseFloat(((gridTemplate.split('(')[1]).split(',')[1]).split('p')[0]) * (gridTemplateRows - 1) / gridTemplateRows;
-
-                        specificSquare.parentNode.style.gridTemplateRows = String('repeat(' + gridTemplateRows + ',' + gridTemplateSize + 'px)');
-                        
-                        specificSquare.parentNode.append(programSpecific);
-                        
-                        ///
-                        if (Math.abs(e['offsetY']) > (parseFloat(((this.parentNode.style.gridTemplateRows.split('(')[1]).split(',')[1]).split('p')[0]) / 2)) {
-                            this.parentNode.append(document.getElementById(newId))
-                        }
-                        else {
-                            this.parentNode.insertBefore(document.getElementById(newId), document.getElementById(this.id).parentNode.children[0]);
-                        }
-                        ///
-                    }
-                    //console.log(document.getElementById('calendarRow').style.gridTemplateColumns.split(' '));
-                }
-            }
-
-        }
-        */
+    
     }
-
 
     items1 = document.querySelectorAll('.gridPerSquareWeek .programSquare, .squareBlank');
     items1.forEach(function(item1) {
@@ -1943,10 +1928,10 @@ function calendarOverview() {
     }
 }
 
-function removeProgram() {
+function removeProgram(isEditRemove, id) {
     if (selectedProgram != undefined) {
         if (Object.keys(data).includes('recycle')){
-            data['recycle'][document.getElementById(selectedProgram).innerText] = data['projects'][document.getElementById(selectedProgram).innerText]
+            data['recycle'][document.getElementById(selectedProgram).innerText] = data['projects'][document.getElementById(selectedProgram).innerText];
         }
         else {
             var newObject = {
@@ -1955,10 +1940,25 @@ function removeProgram() {
                 }
             }
             
-            Object.assign(data, newObject)
+            Object.assign(data, newObject);
         }
-        delete data['projects'][document.getElementById(selectedProgram).innerText]
-        showTime(document.getElementById('currentTimeFrame').innerText)
+        delete data['projects'][document.getElementById(selectedProgram).innerText];
+        showTime(document.getElementById('currentTimeFrame').innerText);
+    } else if (isEditRemove == true) {
+        if (Object.keys(data).includes('recycle')){
+            data['recycle'][id] = data['projects'][id];
+        }
+        else {
+            var newObject = {
+                ['recycle']: {
+                    [id]: data['projects'][id]
+                }
+            }
+            
+            Object.assign(data, newObject);
+        }
+        delete data['projects'][id];
+        showTime(document.getElementById('currentTimeFrame').innerText);
     }
 }
 
