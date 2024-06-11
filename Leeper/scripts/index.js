@@ -68,8 +68,6 @@ firebase.database().ref('/').once('value').then((snapshot) => {
 
     oldData = JSON.stringify(data);
     document.getElementById('submitImg').style.background = 'lightgreen';
-    newProgTempMonthCalendar = month;
-    newProgTempYearCalendar = year;
 });
 
 
@@ -699,6 +697,9 @@ function removed() {
 
 function newProgram() {
 
+    newProgTempMonthCalendar = month;
+    newProgTempYearCalendar = year;
+
     newProgDatesArray = [];
 
     document.getElementById('sideScreen').remove();
@@ -818,10 +819,10 @@ function newProgramDateCalendar(div) {
     } catch (e) {
         div.append(calendar);
     }
-    document.getElementById('newProgMonthName').innerText = newProgTempMonthCalendar
+    document.getElementById('newProgMonthName').innerText = newProgTempMonthCalendar + ' ' + newProgTempYearCalendar;
 
     if (String(tempGetDay).split(' ')[0] != 'Sun') {
-        if (months.indexOf(month) == 0) {
+        if (months.indexOf(tempMonthOverview) == 0) {
             tempDay = parseInt(daysInEachMonth.slice(-1)) + (tempDay - (daysOfTheWeek.indexOf(String(tempGetDay).split(' ')[0])));
             tempMonthOverview = String(months.slice(-1))
         } else {
@@ -866,11 +867,22 @@ function newProgramDateCalendar(div) {
 }
 
 function newProgramDatePrevious() {
-    newProgTempMonthCalendar = months[months.indexOf(newProgTempMonthCalendar) - 1]
+    newProgTempMonthCalendar = months[months.indexOf(newProgTempMonthCalendar) - 1];
+    console.log(months.indexOf(newProgTempMonthCalendar));
+    if (months.indexOf(newProgTempMonthCalendar) < 0) {
+        newProgTempMonthCalendar = String(months.slice(-1));
+        newProgTempYearCalendar = parseInt(newProgTempYearCalendar) - 1;
+    }
     newProgramDateCalendar(document.getElementById('sideScreen'), newProgTempMonthCalendar, newProgTempYearCalendar)
 }
+
 function newProgramDateNext() {
-    newProgTempMonthCalendar = months[months.indexOf(newProgTempMonthCalendar) + 1]
+    newProgTempMonthCalendar = months[months.indexOf(newProgTempMonthCalendar) + 1];
+    console.log(months.indexOf(newProgTempMonthCalendar));
+    if (months.indexOf(newProgTempMonthCalendar) > 11) {
+        newProgTempMonthCalendar = months[0];
+        newProgTempYearCalendar = parseInt(newProgTempYearCalendar) + 1;
+    }
     newProgramDateCalendar(document.getElementById('sideScreen'), newProgTempMonthCalendar, newProgTempYearCalendar)
 }
 
@@ -1359,6 +1371,9 @@ function showWeek(firstDayShown) {
         days.setAttribute('class', 'dayNumbersWeek ' + month);
         days.append(dayNumber);
         daysOnCalendar.push(indexOfDayShown);
+        if (i > 0) {
+            days.style.borderLeft = '2px solid grey'
+        }
         calendarDates.appendChild(days);
         indexOfDayShown = indexOfDayShown + 1
     }
@@ -1374,6 +1389,11 @@ function showWeek(firstDayShown) {
 
         machines.setAttribute('class', 'machineSquare');
         machines.append(machineName);
+
+        if (i > 0) {
+            machines.style.borderTop = '2px solid grey'
+        }
+
         calendarMachines.appendChild(machines);
     }
 
@@ -1390,6 +1410,10 @@ function showWeek(firstDayShown) {
             gridPerSquare.setAttribute('id', Object.keys(data[Object.keys(data)[0]])[i] + ',' + daysOnCalendar[x] + ',gridPerSqaure');
             gridPerSquare.style.gridTemplateRows = 'repeat(1,100%)';
             gridPerSquare.style.gridTemplateColumns = 'repeat(1,95%)';
+            
+            if (i > 0) {
+                gridPerSquare.style.borderTop = '2px solid grey';
+            }
             machinePrograms.append(gridPerSquare);
 
             var squareBlank = document.createElement('div');
@@ -1405,6 +1429,7 @@ function showWeek(firstDayShown) {
 
     //replace with programs
     for (let i = 0; i < Object.keys(data[Object.keys(data)[1]]).length; i++) {
+        var tempStackAmount = 0
         var startDayOfProject = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['startDay'];
         var endDayOfProject = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['endDay'];
         var startMonth = data[Object.keys(data)[1]][Object.keys(data[Object.keys(data)[1]])[i]]['startMonth'];
@@ -1458,16 +1483,19 @@ function showWeek(firstDayShown) {
                         } else {
                             var gridTemplate = specificSquare.parentNode.style.gridTemplateRows;
                             var gridTemplateRows = parseFloat((gridTemplate.split('(')[1]).split(',')[0]) + 1;
-                            var gridTemplateSize = parseFloat(((gridTemplate.split('(')[1]).split(',')[1]).split('p')[0]) * (gridTemplateRows - 1) / gridTemplateRows;
+                            //var gridTemplateSize = parseFloat(((gridTemplate.split('(')[1]).split(',')[1]).split('p')[0]) * (gridTemplateRows - 1) / gridTemplateRows;
+                            var gridTemplateSize = parseFloat(((gridTemplate.split('(')[1]).split(',')[1]).split('p')[0]);
 
+                            if (gridTemplateRows > tempStackAmount) {
+                                tempStackAmount = gridTemplateRows;
+                            }
+                            specificSquare.parentNode.parentNode.style.paddingBottom = String((tempStackAmount - 1) * 14.8) + 'vh';
                             specificSquare.parentNode.style.gridTemplateRows = String('repeat(' + gridTemplateRows + ',' + gridTemplateSize + '%)');
                             
                             specificSquare.parentNode.append(programSpecific);
                         }
-                        //console.log(document.getElementById('calendarRow').style.gridTemplateColumns.split(' '));
                     }
                 }
-
             }
         }
 

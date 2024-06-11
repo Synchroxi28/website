@@ -84,7 +84,7 @@
     text-align: center;
     opacity: '1';
     width: 100%;
-    border: 1px solid white;
+    height: 100%
 }
 .loadingScreen {
     position: absolute;
@@ -411,6 +411,11 @@
     position: relative;
     top: 20vh;
 }
+.progNameAdd, .progNameInput {
+    position: relative;
+    left: 2vw;
+    top: 2vh;
+}
 .StartEndDayBox {
     width: 6vw;
     height: 3vh;
@@ -445,11 +450,12 @@
 .newProgPreviousNextMonth {
     position: absolute;
     top: 10vh;
-    left: 6.3vw;
+    left: 2.5vw;
 }
 .newProgPreviousMonth, .newProgMonthName, .newProgNextMonth {
     float: left;
-    margin: 0.5vw;
+    margin-left: 1vw;
+    margin-right: 1vw;
 }
 .finishNewProgButton {
     position: absolute;
