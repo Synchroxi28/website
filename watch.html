@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="index.css">
+        <title>Title</title>
+    </head>
+    <body>
+        <div class="header">
+            <div class="logo">
+                <img src="beyondLogo.png" alt="Beyond" width="20" height="30" id="logoImg">
+                eyond
+            </div>
+            <iframe id="myVideo" width="640" height="480"></iframe>
+            <button onclick="jumpToTime()" id="timestamp">0</button>
+        </div>
+    </body>
+</html>
+
+<script>
+    const video = document.getElementById('myVideo');
+    const display = document.getElementById('timestamp');
+    var seconds = 0;
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const searchKeyword = urlParams.get('episode');
+
+    document.getElementById("myVideo").src = "loveIslandS8E" + searchKeyword + ".mp4";
+    //document.getElementById("myVideo").load();
+
+    // Listen for time updates as the video plays
+    video.addEventListener('timeupdate', () => {
+        // Get the timestamp in seconds
+        seconds = video.currentTime; 
+        
+        // Display raw seconds (e.g., 73.42)
+        display.textContent = seconds.toFixed(2); 
+    });
+
+    function jumpToTime() {
+        var video = document.getElementById("myVideo");
+        video.currentTime = seconds + 5;
+        video.play();
+    }
+</script>
