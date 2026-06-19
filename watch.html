@@ -24,13 +24,11 @@
                 </div>
             </div>
         </div>
-        <button class="timeStamp" onclick="jumpToTime()" id="timestamp">0</button>
     </body>
 </html>
 
 <script>
     const video = document.getElementById('myVideo');
-    const display = document.getElementById('timestamp');
     var seconds = 0;
 
     const queryString = window.location.search;
@@ -44,11 +42,8 @@
 
     // Listen for time updates as the video plays
     video.addEventListener('timeupdate', () => {
-        // Get the timestamp in seconds
         seconds = video.currentTime; 
         
-        // Display raw seconds (e.g., 73.42)
-        display.textContent = seconds.toFixed(0);
         var currentTimeStampIndex = -1;
         for (const chat of chats) {
             console.log(chat)
