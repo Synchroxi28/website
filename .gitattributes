@@ -1,0 +1,2 @@
+*.mp4 binary
+loveIslandS8E02.mp4 filter=lfs diff=lfs merge=lfs -text
