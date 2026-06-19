@@ -64,10 +64,12 @@ body
     width: 100%;
     flex: 1; /* Takes up remaining space */
     background: rgba(52, 78, 65, 0.95);;
-    border-radius: 8px;
+    border-radius: .25rem;
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    margin-top: 5rem;
 
 }
 .scroll-box {
@@ -110,7 +112,18 @@ body
     cursor: "pointer";
     user-select: none;
 }
-
+.inputCommentBox
+{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 95%;
+    height: 5%;
+    font-size: 1rem;
+    margin-bottom: .25rem;
+    margin-left: .2rem;
+    border-radius: .25rem;
+}
 
 
 

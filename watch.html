@@ -19,34 +19,66 @@
                     <source id="myVideoSource" type="video/mp4" />
                 </video>
             </div>
-            <div class="chatContainer">
-                <div class="chatScrollBox" id="chatScrollBox">
+                <div class="chatContainer">
+                    <div class="chatScrollBox" id="chatScrollBox"></div>
+                    <form id="commentBox" method="GET">
+                        <input id="commentText" class="inputCommentBox" type="text" name="comment" placeholder="Comment...">
+                    </form>
                 </div>
-            </div>
         </div>
     </body>
 </html>
 
-<script>
+<script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-database.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+
     const video = document.getElementById('myVideo');
     var seconds = 0;
 
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const searchKeyword = urlParams.get('episode');
+    var chats = ["%0%hey gorgeous", "%100%I hope this works lol", "%400%These are random timestamps so don't pay attention to where they skip to", "%3000%I'm gonna work on making your own comments tonight but for now I wanted to test this"];
 
-    const chats = ["%0%hey gorgeous", "%100%I hope this works lol", "%400%These are random timestamps so don't pay attention to where they skip to", "%3000%I'm gonna work on making your own comments tonight but for now I wanted to test this"];
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDjzuS3HCMW-TedqaZoprz3Vf8gKag7Woo",
+        authDomain: "ourdistantcinema.firebaseapp.com",
+        databaseURL: "https://ourdistantcinema-default-rtdb.firebaseio.com",
+        projectId: "ourdistantcinema",
+        storageBucket: "ourdistantcinema.firebasestorage.app",
+        messagingSenderId: "550274129627",
+        appId: "1:550274129627:web:b268e3f22774b83c5bb6fe"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    onValue(ref(db, searchKeyword + '/'), (snapshot) => {
+        const data = snapshot.val();
+        chats = Object.keys(data);
+        populateChats()
+    });
+
+
 
     document.getElementById("myVideoSource").src = "https://media.githubusercontent.com/media/Synchroxi28/website/main/loveIslandS8E" + searchKeyword + ".mp4";
     document.getElementById("myVideo").load();
 
     // Listen for time updates as the video plays
     video.addEventListener('timeupdate', () => {
+        // Get the timestamp in seconds
         seconds = video.currentTime; 
         
+        // Display raw seconds (e.g., 73.42)
         var currentTimeStampIndex = -1;
         for (const chat of chats) {
-            console.log(chat)
             if (parseInt(chat.split("%")[1]) <= parseInt(seconds.toFixed(0)))
             {
                 currentTimeStampIndex = currentTimeStampIndex + 1;
@@ -55,40 +87,71 @@
 
         if (currentTimeStampIndex >= 0)
         {
-            document.getElementById(chats[currentTimeStampIndex].split("%")[1]).className = "chatActive";
+            try 
+            {
+                document.getElementById(chats[currentTimeStampIndex].split("%")[1]).className = "chatActive";
+            } catch (error) 
+            {
+                console.log(error);
+            }
         }
 
         for (const chat of chats) {
             if (chats.indexOf(chat) != currentTimeStampIndex)
             {
-                document.getElementById(chats[chats.indexOf(chat)].split("%")[1]).className = "chat";
+                try 
+                {
+                    document.getElementById(chats[chats.indexOf(chat)].split("%")[1]).className = "chat";
+                } catch (error) 
+                {
+                    console.log(error);
+                }
             }
         }
+    });
+
+    document.getElementById('commentBox').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const inputValue = document.getElementById('commentText').value;
+
+        const comment = {};
+        comment["%" + String(seconds.toFixed(0)) + "%" + inputValue] = "";
+        update(ref(db, searchKeyword + '/'), comment);
+
+        document.getElementById('commentText').value = ""
     });
 
 
     const parentElement = document.getElementById("chatScrollBox");
 
-    for (const chat of chats) {
-        const containerElement = document.createElement("div");
-        containerElement.dataset.timeStamp = chat.split("%")[1];
-        containerElement.id = chat.split("%")[1];
-        containerElement.className = "chat";
-        parentElement.append(containerElement);
+    function populateChats()
+    {
+        document.getElementById("chatScrollBox").replaceChildren();
+    
+        for (const chat of chats) 
+        {
+            const containerElement = document.createElement("div");
+            containerElement.dataset.timeStamp = chat.split("%")[1];
+            containerElement.id = chat.split("%")[1];
+            containerElement.className = "chat";
+            parentElement.append(containerElement);
 
-        const timestampElement = document.createElement("div");
-        const minutes = Math.floor(parseInt(chat.split("%")[1]) / 60);
-        const remainingSeconds = parseInt(chat.split("%")[1]) % 60;
-        timestampElement.textContent = `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
-        timestampElement.className = "timeStamp";
+            const timestampElement = document.createElement("div");
+            const minutes = Math.floor(parseInt(chat.split("%")[1]) / 60);
+            const remainingSeconds = parseInt(chat.split("%")[1]) % 60;
+            timestampElement.textContent = `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+            timestampElement.className = "timeStamp";
 
-        containerElement.append(timestampElement);
+            containerElement.append(timestampElement);
 
-        const chatTextElement = document.createElement("div");
-        chatTextElement.textContent = ": " + chat.split("%")[2];
-        chatTextElement.className = "chatText";
-        containerElement.append(chatTextElement);
+            const chatTextElement = document.createElement("div");
+            chatTextElement.textContent = ": " + chat.split("%")[2];
+            chatTextElement.className = "chatText";
+            containerElement.append(chatTextElement);
+        }
     }
+
 
 
     document.addEventListener("click", (event) => {
