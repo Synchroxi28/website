@@ -3,8 +3,10 @@ body
 {
     display: flex;
     flex-direction: column; /* Stacks items vertically */
-    gap: 16px;              /* Controls the space between items */
+    gap: 1rem;              /* Controls the space between items */
     align-items: left;
+    padding-left: 2rem;
+    padding-top: 2rem;
 }
 .header
 {
@@ -20,22 +22,14 @@ body
 #logoImg
 {
     transform: rotate(-90deg);
-    padding: 0px 0px;
     width: 20%;
-    height: 20px;
+    height: 2rem;
 }
 .logo
 {
-    padding: 10px 10px;
-    font-size: 35px;
+    padding: 1rem 1rem;
+    font-size: 3rem;
     font-weight: bold;
     display: flex;
     align-items: center;
-}
-.tab
-{
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: 35px;
 }
