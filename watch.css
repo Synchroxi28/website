@@ -61,6 +61,7 @@ body
 }
 .chatContainer
 {
+    width: 100%;
     flex: 1; /* Takes up remaining space */
     background: rgba(52, 78, 65, 0.95);;
     border-radius: 8px;
@@ -68,4 +69,59 @@ body
     flex-direction: column;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
+}
+.scroll-box {
+  width: 100%;        /* Box fills its parent container width */
+  height: 100%;      /* Forces a fixed height to contain the content */
+  overflow: auto;     /* Adds scrollbars dynamically only when needed */
+  border: .25rem solid #333;
+}
+.chat
+{
+    display: flex;
+    flex-direction: row;
+    width: 88%;
+    height: auto;
+    font-size: 1rem;
+    cursor: "pointer";
+    padding: 1rem;
+}
+.chatActive
+{
+    background-color: #2A3E34;
+    display: flex;
+    flex-direction: row;
+    width: 88%;
+    height: auto;
+    font-size: 1rem;
+    cursor: "pointer";
+    padding: 1rem;
+    user-select: none;
+}
+.timeStamp
+{
+    color: rgba(163, 177, 138, 0.7);
+    cursor: "pointer";
+    user-select: none;
+}
+.chatText
+{
+    color: rgba(250, 249, 246, 0.95);
+    cursor: "pointer";
+    user-select: none;
+}
+
+
+
+
+/* Phone */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .video,
+    .chat {
+        width: 100%;
+    }
 }
