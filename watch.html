@@ -12,7 +12,9 @@
                 <img src="beyondLogo.png" alt="Beyond" width="20" height="30" id="logoImg">
                 eyond
             </div>
-            <iframe id="myVideo" width="640" height="480"></iframe>
+            <video id="myVideo" width="640" height="480">
+                <source id="myVideoSource" type="video/mp4" />
+            </video>
             <button onclick="jumpToTime()" id="timestamp">0</button>
         </div>
     </body>
@@ -27,7 +29,7 @@
     const urlParams = new URLSearchParams(queryString);
     const searchKeyword = urlParams.get('episode');
 
-    document.getElementById("myVideo").src = "loveIslandS8E" + searchKeyword + ".mp4";
+    document.getElementById("myVideoSource").src = "loveIslandS8E" + searchKeyword + ".mp4";
     //document.getElementById("myVideo").load();
 
     // Listen for time updates as the video plays
