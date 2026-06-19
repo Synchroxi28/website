@@ -1,0 +1,75 @@
+
+
+body 
+{
+    display: flex;
+    flex-direction: column; /* Stacks items vertically */
+    gap: 1rem;              /* Controls the space between items */
+    align-items: left;
+    padding-left: 2rem;
+    padding-top: 2rem;
+    background-color: #fffdda;
+    color: black;
+}
+.cuteMessage
+{
+    display: inline;
+    color: #1B4332;
+    flex-direction: row;
+    font-size: 2rem;
+}
+.heart
+{
+    font-size: 2rem;
+    display: inline;
+    flex-direction: row;
+    color: #D88C9A;
+}
+.header
+{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+.showName
+{
+    width: 100%;
+    font-weight: bold;
+}
+.showEpisodes 
+{
+    display: grid;
+    /* Creates three columns of equal width */
+    grid-template-columns: 1fr 1fr 1fr; 
+    /* Adds a 10px spacing gap between rows and columns */
+    gap: 1rem; 
+}
+
+.showEpisodeItem 
+{
+    background-color: #7BA05B;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+.showEpisodeItem:hover 
+{
+  background: #E85D75;
+  outline: .25rem solid #FFD700;
+  outline-offset: .15rem;
+}
+#logoImg
+{
+    transform: rotate(-90deg);
+    width: 20%;
+    height: 2rem;
+    margin-right: .25rem;
+}
+.logo
+{
+    padding: 1rem 1rem;
+    font-size: 3rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
