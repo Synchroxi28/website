@@ -1,0 +1,41 @@
+
+body 
+{
+    display: flex;
+    flex-direction: column; /* Stacks items vertically */
+    gap: 16px;              /* Controls the space between items */
+    align-items: left;
+}
+.header
+{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+.showName
+{
+    width: 100%;
+    font-weight: bold;
+}
+#logoImg
+{
+    transform: rotate(-90deg);
+    padding: 0px 0px;
+    width: 20%;
+    height: 20px;
+}
+.logo
+{
+    padding: 10px 10px;
+    font-size: 35px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+.tab
+{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 35px;
+}
