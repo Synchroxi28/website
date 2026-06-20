@@ -3,33 +3,72 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" type="text/css" href="index.css">
-        <title>Title</title>
+        <link rel="stylesheet" type="text/css" href="watch.css">
+        <title>Our Distant Cinema</title>
     </head>
     <body>
         <div class="header">
             <div class="logo">
-                <img src="beyondLogo.png" alt="Beyond" width="20" height="30" id="logoImg">
+                <img src="beyondLogo.png" alt="B" width="20" height="30" id="logoImg">
                 eyond
             </div>
-            <video id="myVideo" width="640" height="480" autoplay muted loop playsinline controls>
-                <source id="myVideoSource" type="video/mp4" />
-            </video>
-            <button onclick="jumpToTime()" id="timestamp">0</button>
+        </div>
+        <div class="cinemaRoom">
+            <div class="videoContainer">
+                <video id="myVideo" class="video" controls>
+                    <source id="myVideoSource" type="video/mp4" />
+                </video>
+            </div>
+                <div class="chatContainer">
+                    <div class="chatScrollBox" id="chatScrollBox"></div>
+                    <form id="commentBox" method="GET">
+                        <input id="commentText" class="inputCommentBox" type="text" name="comment" placeholder="Comment...">
+                    </form>
+                </div>
         </div>
     </body>
 </html>
 
-<script>
+<script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-database.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+
     const video = document.getElementById('myVideo');
-    const display = document.getElementById('timestamp');
     var seconds = 0;
 
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const searchKeyword = urlParams.get('episode');
+    var chats = ["%0%hey gorgeous", "%100%I hope this works lol", "%400%These are random timestamps so don't pay attention to where they skip to", "%3000%I'm gonna work on making your own comments tonight but for now I wanted to test this"];
 
-    document.getElementById("myVideoSource").src = "loveIslandS8E" + searchKeyword + ".mp4";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDjzuS3HCMW-TedqaZoprz3Vf8gKag7Woo",
+        authDomain: "ourdistantcinema.firebaseapp.com",
+        databaseURL: "https://ourdistantcinema-default-rtdb.firebaseio.com",
+        projectId: "ourdistantcinema",
+        storageBucket: "ourdistantcinema.firebasestorage.app",
+        messagingSenderId: "550274129627",
+        appId: "1:550274129627:web:b268e3f22774b83c5bb6fe"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    onValue(ref(db, searchKeyword + '/'), (snapshot) => {
+        const data = snapshot.val();
+        chats = Object.keys(data);
+        populateChats()
+    });
+
+
+
+    document.getElementById("myVideoSource").src = "https://media.githubusercontent.com/media/Synchroxi28/website/main/loveIslandS8E" + searchKeyword + ".mp4";
     document.getElementById("myVideo").load();
 
     // Listen for time updates as the video plays
@@ -38,12 +77,95 @@
         seconds = video.currentTime; 
         
         // Display raw seconds (e.g., 73.42)
-        display.textContent = seconds.toFixed(2); 
+        var currentTimeStampIndex = -1;
+        for (const chat of chats) {
+            if (parseInt(chat.split("%")[1]) <= parseInt(seconds.toFixed(0)))
+            {
+                currentTimeStampIndex = currentTimeStampIndex + 1;
+            }
+        }
+
+        if (currentTimeStampIndex >= 0)
+        {
+            try 
+            {
+                document.getElementById(chats[currentTimeStampIndex].split("%")[1]).className = "chatActive";
+            } catch (error) 
+            {
+                console.log(error);
+            }
+        }
+
+        for (const chat of chats) {
+            if (chats.indexOf(chat) != currentTimeStampIndex)
+            {
+                try 
+                {
+                    document.getElementById(chats[chats.indexOf(chat)].split("%")[1]).className = "chat";
+                } catch (error) 
+                {
+                    console.log(error);
+                }
+            }
+        }
     });
 
-    function jumpToTime() {
+    document.getElementById('commentBox').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const inputValue = document.getElementById('commentText').value;
+
+        const comment = {};
+        comment["%" + String(seconds.toFixed(0)) + "%" + inputValue] = "";
+        update(ref(db, searchKeyword + '/'), comment);
+
+        document.getElementById('commentText').value = ""
+    });
+
+
+    const parentElement = document.getElementById("chatScrollBox");
+
+    function populateChats()
+    {
+        document.getElementById("chatScrollBox").replaceChildren();
+    
+        for (const chat of chats) 
+        {
+            const containerElement = document.createElement("div");
+            containerElement.dataset.timeStamp = chat.split("%")[1];
+            containerElement.id = chat.split("%")[1];
+            containerElement.className = "chat";
+            parentElement.append(containerElement);
+
+            const timestampElement = document.createElement("div");
+            const minutes = Math.floor(parseInt(chat.split("%")[1]) / 60);
+            const remainingSeconds = parseInt(chat.split("%")[1]) % 60;
+            timestampElement.textContent = `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+            timestampElement.className = "timeStamp";
+
+            containerElement.append(timestampElement);
+
+            const chatTextElement = document.createElement("div");
+            chatTextElement.textContent = ": " + chat.split("%")[2];
+            chatTextElement.className = "chatText";
+            containerElement.append(chatTextElement);
+        }
+    }
+
+
+
+    document.addEventListener("click", (event) => {
+        if (event.target.className === "chat" || event.target.className === "chatActive") {
+            jumpToTime(event.target.dataset.timeStamp)
+        }
+        if (event.target.className === "timeStamp" || event.target.className === "chatText") {
+            jumpToTime(event.target.parentElement.dataset.timeStamp)
+        }
+    });
+
+    function jumpToTime(timeToJumpTo) {
         var video = document.getElementById("myVideo");
-        video.currentTime = seconds + 5;
+        video.currentTime = timeToJumpTo;
         video.play();
     }
 </script>
