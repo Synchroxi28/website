@@ -1,5 +1,1 @@
-*.mp4 binary
-<<<<<<< HEAD
-loveIslandS8E02.mp4 filter=lfs diff=lfs merge=lfs -text
-=======
->>>>>>> 75746d2a2b0558888c85e9e3bc91de82ae9dea20
+loveIslandS8E15.mp4 filter=lfs diff=lfs merge=lfs -text
