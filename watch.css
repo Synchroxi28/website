@@ -1,0 +1,223 @@
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:linear-gradient(160deg,#171923,#0b0d14);
+    color:white;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:20px;
+}
+
+/* Header */
+.header{
+    width:100%;
+    max-width:1200px;
+    display:flex;
+    align-items:center;
+    padding-bottom:20px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    font-size:clamp(1.6rem, 5vw, 2.5rem);
+    font-weight:bold;
+    color:black;
+}
+
+#logoImg{
+    transform:rotate(-90deg);
+    width:32px;
+    height:auto;
+}
+
+/* Main Room */
+.cinemaRoom{
+    width:100%;
+    max-width:1200px;
+    display:flex;
+    gap:25px;
+    align-items:flex-start;
+}
+
+/* Video Section */
+.videoContainer{
+    flex:3;
+    position:relative;
+    width:100%;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;
+    overflow:hidden;
+    backdrop-filter:blur(10px);
+    padding-bottom:56.25%;
+}
+
+.video{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+}
+
+/* Chat Section */
+.chatContainer{
+    flex:1;
+    min-width:320px;
+    height:70vh;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;
+    backdrop-filter:blur(10px);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+/* Scroll Area */
+.chatScrollBox{
+    flex:1;
+    overflow-y:auto;
+    padding:15px;
+}
+
+/* Individual Chat */
+.chat,
+.chatActive{
+    display:flex;
+    padding:14px;
+    border-radius:12px;
+    margin-bottom:10px;
+    cursor:pointer;
+    transition:.25s;
+    user-select:none;
+}
+
+.chat{
+    background:rgba(255,255,255,.03);
+}
+
+.chat:hover{
+    background:rgba(255,255,255,.07);
+}
+
+.chatActive{
+    background:#7bcf9c;
+    box-shadow:0 8px 20px rgba(123,207,156,.35);
+}
+
+.chatActive .timeStamp{
+    color:#1b2a22;
+    font-weight:bold;
+}
+
+.chatActive .chatText{
+    color:#0f1612;
+    font-weight:600;
+}
+
+.timeStamp{
+    display:flex;
+    color:#ff8ab7;
+    font-weight:bold;
+    flex-shrink:0;
+    align-items: center;
+}
+
+.chatText{
+    color:#faf9f6;
+    line-height:1.4;
+    word-wrap:break-word;
+}
+
+/* Input */
+#commentBox{
+    padding:12px;
+    border-top:1px solid rgba(255,255,255,.08);
+}
+
+.inputCommentBox{
+    width:100%;
+    padding:14px;
+    font-size:1rem;
+    border:none;
+    border-radius:12px;
+    outline:none;
+    background:rgba(255,255,255,.08);
+    color:white;
+}
+
+.inputCommentBox::placeholder{
+    color:#bfc5d2;
+}
+
+/* Tablet */
+@media (max-width:1024px){
+    .cinemaRoom{
+        flex-direction:column;
+    }
+
+    .chatContainer{
+        width:100%;
+        min-width:unset;
+        height:400px;
+    }
+}
+
+/* Phone */
+@media (max-width:768px){
+    body{
+        padding:15px;
+    }
+
+    .header{
+        padding-bottom:15px;
+    }
+
+    .cinemaRoom{
+        gap:18px;
+    }
+
+    .chatContainer{
+        height:350px;
+    }
+
+    .chat,
+    .chatActive{
+        padding:12px;
+    }
+
+    .inputCommentBox{
+        padding:12px;
+        font-size:.95rem;
+    }
+
+    #logoImg{
+        width:24px;
+    }
+}
+
+/* Small Phones */
+@media (max-width:480px){
+    .chatContainer{
+        height:300px;
+    }
+
+    .timeStamp{
+        font-size:.9rem;
+    }
+
+    .chatText{
+        font-size:.95rem;
+    }
+}

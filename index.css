@@ -1,0 +1,149 @@
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:linear-gradient(160deg,#171923,#0b0d14);
+    color:white;
+    min-height:100vh;
+}
+
+.header{
+    display:flex;
+    justify-content:flex-start;
+    align-items:center;
+    padding:20px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    font-size:clamp(1.6rem, 5vw, 2.5rem);
+    font-weight:bold;
+    color:black;
+}
+
+#logoImg{
+    transform:rotate(-90deg);
+    width:32px;
+    height:auto;
+}
+
+.container{
+    width:min(900px, 90%);
+    margin:auto;
+}
+
+.hero{
+    text-align:center;
+    padding:50px 15px;
+}
+
+.hero h1{
+    font-size:clamp(2rem, 8vw, 3rem);
+    line-height:1.1;
+    margin-bottom:12px;
+    color: #ff8ab7;
+}
+
+
+.show{
+    margin-top:30px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;
+    padding:20px;
+    backdrop-filter:blur(10px);
+}
+
+.showName{
+    margin-bottom:20px;
+    font-size:clamp(1.5rem, 5vw, 2rem);
+    color: #ff8ab7;
+}
+
+.showEpisodes{
+    display:grid;
+    gap:18px;
+}
+
+.showEpisodeItem{
+    display:block;
+    width:100%;
+    text-decoration:none;
+    color:white;
+    background:#7bcf9c;
+    padding:20px;
+    border-radius:14px;
+    font-size:clamp(1rem, 4vw, 1.2rem);
+    font-weight:bold;
+    min-height:60px;
+    transition:.25s;
+    text-align:center;
+}
+
+.showEpisodeItem:hover{
+    transform:translateY(-4px);
+    background:#ff6b9e;
+    box-shadow:0 12px 30px rgba(255,107,158,.4);
+}
+
+.showEpisodeItem:active{
+    transform:translateY(0);
+}
+
+@media (max-width:768px){
+    .header{
+        padding:15px;
+    }
+
+    .container{
+        width:95%;
+    }
+
+    .hero{
+        padding:40px 10px;
+    }
+
+    .show{
+        padding:18px;
+    }
+
+    .showName{
+        font-size:1.4rem;
+    }
+
+    .showEpisodes{
+        gap:12px;
+    }
+
+    .showEpisodeItem{
+        padding:18px;
+        min-height:55px;
+    }
+
+    #logoImg{
+        width:24px;
+    }
+}
+
+@media (max-width:480px){
+    .hero{
+        padding:30px 8px;
+    }
+
+    .show{
+        padding:15px;
+        border-radius:16px;
+    }
+
+    .showEpisodeItem{
+        font-size:1rem;
+        padding:16px;
+    }
+}
