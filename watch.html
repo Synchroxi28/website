@@ -43,7 +43,7 @@
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const searchKeyword = urlParams.get('episode');
-    var chats = ["%0%hey gorgeous", "%100%I hope this works lol", "%400%These are random timestamps so don't pay attention to where they skip to", "%3000%I'm gonna work on making your own comments tonight but for now I wanted to test this"];
+    var chats = [];
 
 
     const firebaseConfig = {
@@ -146,7 +146,21 @@
             containerElement.append(timestampElement);
 
             const chatTextElement = document.createElement("div");
-            chatTextElement.textContent = ": " + chat.split("%")[2];
+            var createText = (chat.split("%")).slice(2);
+            console.log(createText)
+            var shownText = "";
+            for (const textIndex in createText)
+            {
+                if (textIndex == 0)
+                {
+                    shownText = shownText + createText[textIndex];
+                }
+                else
+                {
+                    shownText = shownText + "%" + createText[textIndex];
+                }
+            }
+            chatTextElement.textContent = ": " + shownText;
             chatTextElement.className = "chatText";
             containerElement.append(chatTextElement);
         }
