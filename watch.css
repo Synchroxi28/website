@@ -132,6 +132,7 @@ body{
     font-weight:bold;
     flex-shrink:0;
     align-items: top;
+    margin-top:4px;
 }
 
 .chatText{
