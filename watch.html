@@ -44,8 +44,6 @@
     const urlParams = new URLSearchParams(queryString);
     const searchKeyword = urlParams.get('episode');
     var chats = [];
-    var times = [];
-    var chatsInOrder = [];
 
 
     const firebaseConfig = {
@@ -66,13 +64,7 @@
         const data = snapshot.val();
         chats = Object.keys(data);
 
-        var times = [];
-        for (const timeJump in chats)
-        {
-            times.push(timeJump.split("%")[1])
-        }
-
-        chatsInOrder.sort((a, b) => a - b);
+        chats.sort((a, b) => parseInt(a.split("%")[1]) - parseInt(b.split("%")[1]));
 
         populateChats()
     });
