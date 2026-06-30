@@ -210,7 +210,7 @@ body{
 /* Small Phones */
 @media (max-width:480px){
     .chatContainer{
-        height:300px;
+        height:400px;
     }
 
     .timeStamp{
@@ -218,6 +218,6 @@ body{
     }
 
     .chatText{
-        font-size:.95rem;
+        font-size: 16px;
     }
 }
