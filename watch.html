@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" type="text/css" href="watch.css?v=1.0">
+        <link rel="stylesheet" type="text/css" href="watch.css?v=1.11">
         <title>Our Distant Cinema</title>
     </head>
     <body>
@@ -63,6 +63,9 @@
     onValue(ref(db, searchKeyword + '/'), (snapshot) => {
         const data = snapshot.val();
         chats = Object.keys(data);
+
+        chats.sort((a, b) => parseInt(a.split("%")[1]) - parseInt(b.split("%")[1]));
+
         populateChats()
     });
 
@@ -147,7 +150,6 @@
 
             const chatTextElement = document.createElement("div");
             var createText = (chat.split("%")).slice(2);
-            console.log(createText)
             var shownText = "";
             for (const textIndex in createText)
             {
