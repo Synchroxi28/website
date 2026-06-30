@@ -132,7 +132,7 @@
     {
         document.getElementById("chatScrollBox").replaceChildren();
     
-        for (const chat of chatsInOrder) 
+        for (const chat of chats) 
         {
             const containerElement = document.createElement("div");
             containerElement.dataset.timeStamp = chat.split("%")[1];
