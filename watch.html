@@ -5,12 +5,38 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" type="text/css" href="watch.css?v=1.11">
         <title>Our Distant Cinema</title>
+        <style>
+            .downloadBtnWrapper {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .downloadBtn {
+                display: inline-block;
+                padding: 7px 18px;
+                background: rgba(255,255,255,0.15);
+                color: #fff;
+                text-decoration: none;
+                border-radius: 20px;
+                font-size: 13px;
+                letter-spacing: 0.03em;
+                border: 1px solid rgba(255,255,255,0.35);
+                transition: background 0.2s;
+                white-space: nowrap;
+            }
+            .downloadBtn:hover {
+                background: rgba(255,255,255,0.28);
+            }
+        </style>
     </head>
     <body>
         <div class="header">
             <div class="logo">
                 <img src="beyondLogo.png" alt="B" width="20" height="30" id="logoImg">
                 eyond
+            </div>
+            <div class="downloadBtnWrapper">
+                <a id="downloadBtn" class="downloadBtn" download>⬇ Download Episode</a>
             </div>
         </div>
         <div class="cinemaRoom">
@@ -71,8 +97,10 @@
 
 
 
-    document.getElementById("myVideoSource").src = "https://media.githubusercontent.com/media/Synchroxi28/website/main/loveIslandS8E" + searchKeyword + ".mp4";
+    const videoSrc = "https://media.githubusercontent.com/media/Synchroxi28/website/main/loveIslandS8E" + searchKeyword + ".mp4";
+    document.getElementById("myVideoSource").src = videoSrc;
     document.getElementById("myVideo").load();
+    document.getElementById("downloadBtn").href = videoSrc;
 
     // Listen for time updates as the video plays
     video.addEventListener('timeupdate', () => {
